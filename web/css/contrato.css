@@ -1,0 +1,178 @@
+/* ============================================
+   Estilos módulo Contrato
+   ============================================ */
+
+html:not([data-bs-theme="dark"]) {
+    --guinda: #6B1E3C;
+    --guinda-dark: #4A1428;
+    --guinda-light: #8C3A5C;
+    --dorado: #C9A24B;
+    --bg-warm: #FAF7F5;
+    --estado-ok: #3D7A5C;
+    --estado-ok-bg: #E7F1EC;
+    --estado-pendiente: #B8863B;
+    --estado-pendiente-bg: #FBF1DE;
+}
+
+/* --- Índice / GridView --- */
+
+html:not([data-bs-theme="dark"]) .grid-view thead th {
+    background-color: var(--guinda);
+    color: #fff;
+    border: none !important;
+    font-weight: 600;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 14px 16px;
+}
+
+html:not([data-bs-theme="dark"]) .grid-view thead th a {
+    color: #fff !important;
+}
+
+html:not([data-bs-theme="dark"]) .grid-view tbody tr:hover {
+    background-color: #FBF1F5;
+}
+
+html:not([data-bs-theme="dark"]) .grid-view td {
+    padding: 14px 16px;
+    vertical-align: middle;
+}
+
+html:not([data-bs-theme="dark"]) .badge-estado-ok {
+    background-color: var(--estado-ok-bg);
+    color: var(--estado-ok);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+html:not([data-bs-theme="dark"]) .badge-estado-pendiente {
+    background-color: var(--estado-pendiente-bg);
+    color: var(--estado-pendiente);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+html:not([data-bs-theme="dark"]) .contrato-codigo {
+    color: var(--guinda);
+    font-weight: 600;
+}
+
+/* --- Botones del módulo --- */
+
+html:not([data-bs-theme="dark"]) .contrato-index .btn-primary,
+html:not([data-bs-theme="dark"]) .contrato-form .btn-primary {
+    background-color: var(--guinda) !important;
+    border-color: var(--guinda) !important;
+}
+
+html:not([data-bs-theme="dark"]) .contrato-index .btn-primary:hover,
+html:not([data-bs-theme="dark"]) .contrato-form .btn-primary:hover {
+    background-color: var(--guinda-dark) !important;
+    border-color: var(--guinda-dark) !important;
+}
+
+/* --- Formulario --- */
+
+html:not([data-bs-theme="dark"]) .form-card {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-left: 4px solid var(--guinda);
+    border-radius: 8px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .04);
+}
+
+html:not([data-bs-theme="dark"]) .form-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--guinda);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+html:not([data-bs-theme="dark"]) .contrato-form .form-control:focus,
+html:not([data-bs-theme="dark"]) .contrato-form .form-select:focus {
+    border-color: var(--guinda);
+    box-shadow: 0 0 0 0.2rem rgba(107, 30, 60, .15);
+}
+
+html:not([data-bs-theme="dark"]) .btn-outline-guinda {
+    color: var(--guinda);
+    border: 1px solid var(--guinda);
+    background: transparent;
+}
+
+html:not([data-bs-theme="dark"]) .btn-outline-guinda:hover {
+    background-color: var(--guinda);
+    color: #fff;
+}
+
+html:not([data-bs-theme="dark"]) .firma-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    background: var(--bg-warm);
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+html:not([data-bs-theme="dark"]) .firma-numero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    background-color: var(--guinda);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+html:not([data-bs-theme="dark"]) .firma-row .form-control {
+    border: 1px solid #ddd;
+    background: #fff;
+}
+
+html:not([data-bs-theme="dark"]) .btn-remove-firma {
+    background: none;
+    border: none;
+    color: #b04a4a;
+    font-size: 1.3rem;
+    line-height: 1;
+    padding: 0 6px;
+    cursor: pointer;
+}
+
+html:not([data-bs-theme="dark"]) .btn-remove-firma:hover {
+    color: #7a1f1f;
+}
+
+html:not([data-bs-theme="dark"]) .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    align-items: center;
+}
+
+.post-it {
+    background: #fff9c4;
+    padding: 12px;
+    width: 200px;
+    min-height: 120px;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+    transform: rotate(-1deg);
+    font-size: 0.85rem;
+}
+.post-it:nth-child(even) {
+    transform: rotate(1deg);
+}
