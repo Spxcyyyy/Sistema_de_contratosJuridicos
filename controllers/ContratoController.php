@@ -228,6 +228,7 @@ class ContratoController extends Controller
                     'actions' => [
                         'delete' => ['POST'],
                         'marcar-firmado' => ['POST'],
+                        'desmarcar-firmado' => ['POST'],
                         'add-nota' => ['POST'],
                     ],
                 ],
@@ -403,10 +404,29 @@ class ContratoController extends Controller
         ];
     }
 
+    public function actionDesmarcarFirmado($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $firma = \app\models\Firma::findOne($id);
+        if (!$firma) {
+            return ['success' => false, 'message' => 'Firma no encontrada.'];
+        }
+
+        if (!$firma->desmarcarComoFirmado()) {
+            return ['success' => false, 'message' => 'No se pudo desmarcar la firma.'];
+        }
+
+        return [
+            'success' => true,
+            'contrato_estado' => $firma->contrato->estado,
+        ];
+    }
+
 
     public function actionAddNota($id)
     {
-        $contrato = $this->findModel($id); // ajusta al nombre real de tu método findModel
+        $contrato = $this->findModel($id); 
 
         $nota = new \app\models\ContratoNota();
         $nota->contrato_id = $contrato->id;

@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\db\ActiveQuery;
 
-/** Default scope is applied at SQL preparation, so where()/findOne() cannot replace it. */
 class SoftDeleteQuery extends ActiveQuery
 {
     private bool $includeDeleted = false;

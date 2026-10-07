@@ -6,7 +6,7 @@ use Yii;
 use app\models\User;
 use yii\filters\AccessControl;
 
-/** One explicit allow-list shared by controller filters and visible UI actions. */
+/** Lista explícita de permisos compartida por los filtros de los controladores y las acciones visibles en la interfaz. */
 final class AccessPolicy
 {
     private const READERS = [User::ROLE_ADMIN, User::ROLE_USUARIO, User::ROLE_RECABADOR];
@@ -14,7 +14,7 @@ final class AccessPolicy
     private const COLLECTORS = [User::ROLE_ADMIN, User::ROLE_RECABADOR];
 
     public const PERMISSIONS = [
-        'site/index' => self::READERS,
+        'site/dashboard' => self::EDITORS,
         'contrato/index' => self::READERS,
         'contrato/view' => self::READERS,
         'contrato/actividad' => self::EDITORS,
@@ -24,11 +24,10 @@ final class AccessPolicy
         'contrato/delete' => self::EDITORS,
         'contrato/add-nota' => self::COLLECTORS,
         'contrato/marcar-firmado' => self::READERS,
+        'contrato/desmarcar-firmado' => self::READERS,
         'firma/index' => self::EDITORS,
+        'firma/seleccionar' => self::EDITORS,
         'firma/view' => self::EDITORS,
-        'firma/create' => [User::ROLE_ADMIN],
-        'firma/update' => [User::ROLE_ADMIN],
-        'firma/delete' => [User::ROLE_ADMIN],
         'user/index' => [User::ROLE_ADMIN],
         'user/view' => [User::ROLE_ADMIN],
         'user/create' => [User::ROLE_ADMIN],

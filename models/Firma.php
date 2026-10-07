@@ -118,6 +118,29 @@ class Firma extends SoftDeleteRecord
         return $saved;
     }
 
+    public function desmarcarComoFirmado()
+    {
+        if ($this->estado === 'pendiente' && $this->fecha_firma === null) {
+            return true;
+        }
+
+        $previousState = $this->estado;
+        $previousDate = $this->fecha_firma;
+        $this->estado = 'pendiente';
+        $this->fecha_firma = null;
+        $saved = $this->save();
+        if (!$saved) {
+            $this->estado = $previousState;
+            $this->fecha_firma = $previousDate;
+        }
+
+        if ($saved && $this->contrato) {
+            $this->contrato->refresh();
+        }
+
+        return $saved;
+    }
+
     public function behaviors()
     {
         return [

@@ -10,7 +10,7 @@ use yii\helpers\Html;
 use app\components\AccessPolicy;
 
 $items = [
-    ['label' => 'Inicio', 'url' => ['/site/index'], 'visible' => Yii::$app->user->isGuest || !Yii::$app->user->identity->isRecabador()],
+    ['label' => 'Inicio', 'url' => ['/site/dashboard'], 'visible' => !Yii::$app->user->isGuest && !Yii::$app->user->identity->isRecabador()],
 ];
 
 if (AccessPolicy::allows('contrato/index')) {

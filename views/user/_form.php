@@ -27,7 +27,7 @@ $isCreate = $model->isNewRecord;
             <div class="col-md-6">
                 <?= $form->field($model, 'status')->dropDownList([
                     User::STATUS_ACTIVE => 'Activo',
-                    User::STATUS_INACTIVE => 'Inactivo',
+                    User::STATUS_INACTIVE => 'Desactivado',
                 ]) ?>
             </div>
             <div class="col-md-6">

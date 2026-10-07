@@ -2,6 +2,7 @@
 
 namespace app\models\searchs;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Firma;
@@ -11,15 +12,28 @@ use app\models\Firma;
  */
 class FirmaSearchs extends Firma
 {
+    public $nomenclaturaContrato;
+    public $codigoContrato;
+    public $fechaRegistro;
+
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'nomenclaturaContrato' => 'Nomenclatura',
+            'codigoContrato' => 'Código del contrato',
+            'fechaRegistro' => 'Fecha de registro',
+        ]);
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['nombre'], 'string', 'max' => 50],
+            [['nombre', 'nomenclaturaContrato', 'codigoContrato'], 'string', 'max' => 50],
             [['id', 'contrato_id', 'created_at'], 'integer'],
-            [['nombre'], 'safe'],
+            [['fechaRegistro'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }
 
@@ -42,12 +56,32 @@ class FirmaSearchs extends Firma
      */
     public function search($params, $formName = null)
     {
-        $query = Firma::find();
+        $query = Firma::find()->joinWith('contrato');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'attributes' => [
+                    'nomenclaturaContrato' => [
+                        'asc' => ['contratos.nomenclatura' => SORT_ASC],
+                        'desc' => ['contratos.nomenclatura' => SORT_DESC],
+                    ],
+                    'codigoContrato' => [
+                        'asc' => ['contratos.codigo' => SORT_ASC],
+                        'desc' => ['contratos.codigo' => SORT_DESC],
+                    ],
+                    'nombre' => [
+                        'asc' => ['firmas.nombre' => SORT_ASC],
+                        'desc' => ['firmas.nombre' => SORT_DESC],
+                    ],
+                    'fechaRegistro' => [
+                        'asc' => ['firmas.created_at' => SORT_ASC],
+                        'desc' => ['firmas.created_at' => SORT_DESC],
+                    ],
+                ],
+            ],
         ]);
 
         $this->load($params, $formName);
@@ -60,12 +94,20 @@ class FirmaSearchs extends Firma
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'contrato_id' => $this->contrato_id,
-            'created_at' => $this->created_at,
+            'firmas.id' => $this->id,
+            'firmas.contrato_id' => $this->contrato_id,
+            'firmas.created_at' => $this->created_at,
         ]);
 
-        $query->andFilterWhere(['like', 'nombre', $this->nombre]);
+        $query->andFilterWhere(['like', 'firmas.nombre', $this->nombre])
+            ->andFilterWhere(['like', 'contratos.nomenclatura', $this->nomenclaturaContrato])
+            ->andFilterWhere(['like', 'contratos.codigo', $this->codigoContrato]);
+
+        if ($this->fechaRegistro) {
+            $inicio = new \DateTimeImmutable($this->fechaRegistro, new \DateTimeZone(Yii::$app->timeZone));
+            $query->andWhere(['>=', 'firmas.created_at', $inicio->getTimestamp()])
+                ->andWhere(['<', 'firmas.created_at', $inicio->modify('+1 day')->getTimestamp()]);
+        }
 
         return $dataProvider;
     }

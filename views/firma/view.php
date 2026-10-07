@@ -1,13 +1,13 @@
 <?php
 
-use yii\helpers\Html;
 use app\components\AccessPolicy;
+use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Firma $model */
 
-$this->title = $model->id;
+$this->title = 'Firma de ' . $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Firmas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -17,27 +17,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?php if (AccessPolicy::allows('firma/update')): ?>
-            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?php endif; ?>
-        <?php if (AccessPolicy::allows('firma/delete')): ?>
-            <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?= Html::a('Ver contrato', ['/contrato/view', 'id' => $model->contrato_id], ['class' => 'btn btn-outline-secondary']) ?>
+        <?php if (AccessPolicy::allows('contrato/update')): ?>
+            <?= Html::a('Editar firmantes en el contrato', ['/contrato/update', 'id' => $model->contrato_id], ['class' => 'btn btn-primary']) ?>
         <?php endif; ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'contrato_id',
+            [
+                'label' => 'Código del contrato',
+                'value' => $model->contrato?->codigo ?? '—',
+            ],
+            [
+                'label' => 'Nomenclatura',
+                'value' => $model->contrato?->nomenclatura ?? '—',
+            ],
             'nombre',
-            'created_at',
+            [
+                'label' => 'Estado',
+                'value' => $model->estado === 'firmado' ? 'Firmado' : 'Pendiente',
+            ],
+            [
+                'label' => 'Fecha de firma',
+                'value' => $model->fecha_firma
+                    ? Yii::$app->formatter->asDatetime($model->fecha_firma, 'php:d/m/Y H:i')
+                    : 'Sin registrar',
+            ],
+            [
+                'label' => 'Fecha de registro',
+                'value' => Yii::$app->formatter->asDatetime($model->created_at, 'php:d/m/Y H:i'),
+            ],
         ],
     ]) ?>
 

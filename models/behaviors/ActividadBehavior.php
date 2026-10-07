@@ -56,8 +56,8 @@ class ActividadBehavior extends Behavior
         $actividad->entidad = $this->entidad;
         $actividad->entidad_id = $model->id;
         $actividad->accion = $crear ? 'creado' : ($eliminar ? 'eliminado' : 'actualizado');
-        if (!$eliminar && $this->entidad === 'firma' && isset($cambios['estado']) && $model->estado === 'firmado') {
-            $actividad->accion = 'firmado';
+        if (!$crear && !$eliminar && $this->entidad === 'firma' && isset($cambios['estado'])) {
+            $actividad->accion = $model->estado === 'firmado' ? 'firmado' : 'desmarcado';
         }
         $actividad->cambios = json_encode($cambios, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
         $actividad->created_at = time();

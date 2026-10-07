@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'fecha_documento',
                     'filter' => Html::activeInput('date', $searchModel, 'fecha_documento', ['class' => 'form-control', 'aria-label' => 'Filtrar por fecha del documento']),
-                    'format' => ['date', 'php:d/M/Y'],
+                    'format' => ['date', 'php:d/m/Y'],
                 ],
                 [
                     'attribute' => 'estado',

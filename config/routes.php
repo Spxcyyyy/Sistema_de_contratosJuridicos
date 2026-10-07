@@ -1,8 +1,9 @@
 <?php
 
 return [
-    '' => 'site/index',
+    '' => 'site/login',
     'iniciar-sesion' => 'site/login',
+    'panel' => 'site/dashboard',
     'cerrar-sesion' => 'site/logout',
     'recuperar-contrasena' => 'site/request-password-reset',
     'contacto' => 'site/contact',
@@ -16,6 +17,7 @@ return [
     'usuarios' => 'user/index',
     'usuarios/nuevo' => 'user/create',
     'firmas' => 'firma/index',
-    'firmas/nueva' => 'firma/create',
+    'firmas/detalle' => 'firma/view',
+    'firmas/seleccionar' => 'firma/seleccionar',
     ['class' => \app\components\PublicRecordUrlRule::class],
 ];

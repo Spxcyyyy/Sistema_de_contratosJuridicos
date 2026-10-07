@@ -51,7 +51,7 @@ $this->title = 'Contrato ' . $model->codigo;
                 ['attribute' => 'fecha_vencimiento', 'value' => $model->fecha_vencimiento ? Yii::$app->formatter->asDate($model->fecha_vencimiento) : 'Sin fecha límite'],
                 [
                     'attribute' => 'fecha_documento',
-                    'format' => ['date', 'php:d/M/Y'],
+                    'format' => ['date', 'php:d/m/Y'],
                 ],
                 [
                     'attribute' => 'estado',
@@ -107,8 +107,12 @@ $this->title = 'Contrato ' . $model->codigo;
                                 <?= $firma->fecha_firma ? Yii::$app->formatter->asDatetime($firma->fecha_firma) : '—' ?>
                             </td>
                             <td class="accion-cell text-end">
-                                <?php if ($firma->estado !== 'firmado' && AccessPolicy::allows('contrato/marcar-firmado')): ?>
-                                    <button type="button" class="btn btn-sm btn-primary btn-marcar-firmado" data-url="<?= Html::encode(Url::to(['contrato/marcar-firmado', 'id' => $firma->id])) ?>">
+                                <?php if ($firma->estado === 'firmado' && AccessPolicy::allows('contrato/desmarcar-firmado')): ?>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-estado-firma" data-url="<?= Html::encode(Url::to(['contrato/desmarcar-firmado', 'id' => $firma->id])) ?>">
+                                        Desmarcar firma
+                                    </button>
+                                <?php elseif ($firma->estado !== 'firmado' && AccessPolicy::allows('contrato/marcar-firmado')): ?>
+                                    <button type="button" class="btn btn-sm btn-primary btn-estado-firma" data-url="<?= Html::encode(Url::to(['contrato/marcar-firmado', 'id' => $firma->id])) ?>">
                                         Marcar como firmado
                                     </button>
                                 <?php endif; ?>
@@ -190,9 +194,9 @@ $this->title = 'Contrato ' . $model->codigo;
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.btn-marcar-firmado').forEach(function (btn) {
+        document.querySelectorAll('.btn-estado-firma').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                const row = btn.closest('tr');
+                const label = btn.textContent.trim();
                 btn.disabled = true;
                 btn.textContent = 'Guardando...';
 
@@ -203,35 +207,25 @@ $this->title = 'Contrato ' . $model->codigo;
                         'Accept': 'application/json',
                     },
                 })
-                    .then(res => res.json())
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error('No se pudo actualizar la firma.');
+                        }
+                        return res.json();
+                    })
                     .then(data => {
                         if (data.success) {
-                            row.querySelector('.estado-cell').innerHTML = '<span class="badge-estado-ok">Firmado</span>';
-                            row.querySelector('.fecha-firma-cell').textContent = data.fecha_firma;
-                            row.querySelector('.accion-cell').innerHTML = '';
-
-                            // el contador de firmados
-                            const firmados = document.querySelectorAll('#tabla-firmas .badge-estado-ok').length;
-                            const total = document.querySelectorAll('#tabla-firmas tbody tr').length;
-                            document.querySelector('.firmas-contador').textContent = firmados + ' / ' + total + ' firmados';
-
-                            if (data.todas_firmadas) {
-                                const badge = document.getElementById('contrato-estado-badge');
-                                badge.textContent = data.contrato_estado;
-                                badge.className = 'badge-estado-ok';
-                                badge.id = 'contrato-estado-badge';
-                            }
                             window.location.reload();
                         } else {
                             alert(data.message || 'Error al actualizar la firma');
                             btn.disabled = false;
-                            btn.textContent = 'Marcar como firmado';
+                            btn.textContent = label;
                         }
                     })
                     .catch(() => {
-                        alert('Error de conexión');
+                        alert('No se pudo actualizar la firma. Inténtalo de nuevo.');
                         btn.disabled = false;
-                        btn.textContent = 'Marcar como firmado';
+                        btn.textContent = label;
                     });
             });
         });

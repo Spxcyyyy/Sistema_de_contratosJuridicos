@@ -5,13 +5,13 @@ Sistema para registrar contratos jurídicos, administrar firmantes y dar seguimi
 ## Funcionalidades
 
 - Alta, edición y consulta de contratos: código, encargado, nomenclatura, fechas y costo.
-- Registro de firmantes dentro del contrato y marcado de firmas como realizadas.
+- Registro de firmantes dentro del contrato, con opción de marcar y desmarcar firmas recabadas.
 - Filtros por los estados existentes y por fecha en el listado de contratos.
 - Avisos de vencimiento y panel de seguimiento según el rol.
 - Notas e historial de actividad asociado a cada contrato.
 - Reportes en PDF, Excel y CSV.
 - Administración de usuarios y solicitudes de restablecimiento de contraseña.
-- URLs sencillas: contratos identificados por su código; usuarios y firmas mediante referencias públicas.
+- URLs sencillas: contratos identificados por su código, usuarios mediante referencias públicas y detalle de firmas en `/firmas/detalle`.
 - Eliminación lógica: los registros permanecen en la base con `status_registro = 'eliminado'` y se ocultan en las consultas normales.
 
 ## Tecnologías
@@ -30,14 +30,14 @@ Las versiones concretas de las dependencias están fijadas en `composer.lock`.
 | Ver listado y detalle de contratos | Sí | Sí | Sí |
 | Crear y editar contratos y sus firmantes | Sí | Sí | No |
 | Eliminar contratos de forma lógica | Sí | Sí | No |
-| Marcar como firmado dentro del contrato | Sí | Sí | Sí |
+| Marcar o desmarcar firmas dentro del contrato | Sí | Sí | Sí |
 | Agregar notas al contrato | Sí | No | Sí |
 | Consultar historial y reportes | Sí | Sí | No |
 | Consultar el módulo independiente de Firmas | Sí | Sí | No |
-| Crear, editar o eliminar desde el módulo Firmas | Sí | No | No |
+| Crear, editar o eliminar desde el módulo Firmas | No | No | No |
 | Administrar usuarios y restablecer contraseñas | Sí | No | No |
 
-El Recabador entra directamente al listado de contratos. Los permisos se aplican en las vistas y en los controladores mediante `components/AccessPolicy.php`. Las acciones de eliminación y marcado de firmas requieren POST.
+El Recabador entra directamente al listado de contratos. El módulo Firmas es solo de consulta: «Ver» abre la página individual en `/firmas/detalle`, sin ID en la URL. Los firmantes se agregan, editan o quitan desde el contrato. Los permisos se aplican en las vistas y en los controladores mediante `components/AccessPolicy.php`. La selección de la firma y las acciones de eliminación, marcado y desmarcado requieren POST.
 
 ## Instalación local con Docker
 

@@ -22,13 +22,13 @@ class ContratoActividad extends SoftDeleteRecord
             [['contrato_id', 'actor_id', 'entidad_id', 'created_at'], 'integer'],
             [['codigo', 'actor_nombre'], 'string', 'max' => 255],
             [['entidad'], 'in', 'range' => ['contrato', 'firma', 'nota']],
-            [['accion'], 'in', 'range' => ['creado', 'actualizado', 'eliminado', 'firmado']],
+            [['accion'], 'in', 'range' => ['creado', 'actualizado', 'eliminado', 'firmado', 'desmarcado']],
             [['cambios'], 'string'],
         ];
     }
     public function getDescripcion()
     {
-        $acciones = ['creado' => 'Registro creado', 'actualizado' => 'Registro actualizado', 'eliminado' => 'Registro eliminado', 'firmado' => 'Firma recabada'];
+        $acciones = ['creado' => 'Registro creado', 'actualizado' => 'Registro actualizado', 'eliminado' => 'Registro eliminado', 'firmado' => 'Firma recabada', 'desmarcado' => 'Firma desmarcada'];
         $entidades = ['contrato' => 'Contrato', 'firma' => 'Firmante', 'nota' => 'Nota'];
         return ($entidades[$this->entidad] ?? $this->entidad) . ' · ' . ($acciones[$this->accion] ?? $this->accion);
     }

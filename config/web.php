@@ -6,6 +6,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+    'defaultRoute' => 'site/login',
     'language' => 'es',
     'timeZone' => 'America/Mexico_City',
     'bootstrap' => ['log'],
@@ -29,6 +30,11 @@ $config = [
         ],
     ],
     'components' => [
+        'formatter' => [
+            'class' => \yii\i18n\Formatter::class,
+            'dateFormat' => 'php:d/m/Y',
+            'datetimeFormat' => 'php:d/m/Y H:i',
+        ],
         'request' => [
             'cookieValidationKey' => 'TlVmFpZSwizWzm5H-SWQwI9hK6mXhQmS',
         ],

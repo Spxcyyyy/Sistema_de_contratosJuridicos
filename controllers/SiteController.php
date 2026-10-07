@@ -43,12 +43,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['index'],
+                        'actions' => ['dashboard'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => static fn($rule, $action) => \app\components\AccessPolicy::allows($action->uniqueId),
@@ -87,35 +82,26 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Displays the dashboard for authenticated users.
      *
      * @return string
      */
-    public function actionIndex(): Response|string
+    public function actionDashboard(): string
     {
-        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isRecabador()) {
-            return $this->redirect(['/contrato/index']);
-        }
-        $stats = null;
-
-        if (!Yii::$app->user->isGuest) {
-            return $this->render('dashboard', [
-                'stats' => [
-                    'total' => Contrato::find()->count(),
-                    'proceso' => Contrato::find()->enProceso()->count(),
-                    'concluidos' => Contrato::find()->concluidos()->count(),
-                    'firmas' => \app\models\Firma::find()->where(['estado' => 'pendiente'])
-                        ->andWhere(['contrato_id' => Contrato::find()->select('id')->enProceso()])->count(),
-                    'vencidos' => Contrato::find()->vencidos()->count(),
-                    'proximos' => Contrato::find()->proximos()->count(),
-                ],
-                'vencidos' => Contrato::find()->vencidos()->orderBy(['fecha_vencimiento' => SORT_ASC, 'id' => SORT_ASC])->limit(5)->all(),
-                'proximos' => Contrato::find()->proximos()->orderBy(['fecha_vencimiento' => SORT_ASC, 'id' => SORT_ASC])->limit(5)->all(),
-                'actividades' => \app\models\ContratoActividad::find()->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC])->limit(6)->all(),
-            ]);
-        }
-
-        return $this->render('index', ['stats' => $stats]);
+        return $this->render('dashboard', [
+            'stats' => [
+                'total' => Contrato::find()->count(),
+                'proceso' => Contrato::find()->enProceso()->count(),
+                'concluidos' => Contrato::find()->concluidos()->count(),
+                'firmas' => \app\models\Firma::find()->where(['estado' => 'pendiente'])
+                    ->andWhere(['contrato_id' => Contrato::find()->select('id')->enProceso()])->count(),
+                'vencidos' => Contrato::find()->vencidos()->count(),
+                'proximos' => Contrato::find()->proximos()->count(),
+            ],
+            'vencidos' => Contrato::find()->vencidos()->orderBy(['fecha_vencimiento' => SORT_ASC, 'id' => SORT_ASC])->limit(5)->all(),
+            'proximos' => Contrato::find()->proximos()->orderBy(['fecha_vencimiento' => SORT_ASC, 'id' => SORT_ASC])->limit(5)->all(),
+            'actividades' => \app\models\ContratoActividad::find()->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC])->limit(6)->all(),
+        ]);
     }
 
     /**
@@ -126,13 +112,17 @@ class SiteController extends Controller
     public function actionLogin(): Response|string
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect(Yii::$app->user->identity->isRecabador()
+                ? ['/contrato/index']
+                : ['/site/dashboard']);
         }
 
         $model = new LoginForm($this->security);
 
         if ($model->load($this->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->goBack(Yii::$app->user->identity->isRecabador()
+                ? ['/contrato/index']
+                : ['/site/dashboard']);
         }
 
         $model->password = '';

@@ -41,6 +41,9 @@ Editar un contrato conserva los identificadores, estados y fechas de sus
 firmantes. Quitar un firmante de la edición lo elimina y deja registro.
 Agregar una firma pendiente reabre contratos completados automáticamente;
 los contratos marcados manualmente Firmado o Cancelado conservan ese estado.
+En el detalle del contrato, desmarcar una firma la devuelve a Pendiente, borra
+su fecha de firma y registra el cambio en el historial. Si el contrato estaba
+en «Todas las firmas recabadas», vuelve a «En proceso de firmas».
 
 ## Instalación en otro entorno
 

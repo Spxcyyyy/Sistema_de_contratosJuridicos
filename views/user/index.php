@@ -44,9 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         return $model->status == 10
                             ? '<span class="badge-estado-ok">Activo</span>'
-                            : '<span class="badge-estado-pendiente">Inactivo</span>';
+                            : '<span class="badge-estado-pendiente">Desactivado</span>';
                     },
-                    'filter' => [10 => 'Activo', 0 => 'Inactivo'],
+                    'filter' => [10 => 'Activo', 0 => 'Desactivado'],
                 ],
                 [
                     'attribute' => 'reset_request',

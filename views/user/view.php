@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'attribute' => 'status',
-                    'value' => $model->status == 10 ? 'Activo' : 'Inactivo',
+                    'value' => $model->status == 10 ? 'Activo' : 'Desactivado',
                 ],
                 [
                     'attribute' => 'created_at',

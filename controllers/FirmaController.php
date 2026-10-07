@@ -4,12 +4,13 @@ namespace app\controllers;
 
 use app\models\Firma;
 use app\models\searchs\FirmaSearchs;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
- * FirmaController implements the CRUD actions for Firma model.
+ * Consulta de firmas; sus cambios se realizan desde el contrato asociado.
  */
 class FirmaController extends Controller
 {
@@ -23,17 +24,15 @@ class FirmaController extends Controller
             [
                 'access' => \app\components\AccessPolicy::accessBehavior(),
                 'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
+                    'class' => VerbFilter::class,
+                    'actions' => ['seleccionar' => ['POST']],
                 ],
             ]
         );
     }
 
     /**
-     * Lists all Firma models.
+     * Muestra las firmas registradas.
      *
      * @return string
      */
@@ -41,7 +40,6 @@ class FirmaController extends Controller
     {
         $searchModel = new FirmaSearchs();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -49,80 +47,45 @@ class FirmaController extends Controller
     }
 
     /**
-     * Displays a single Firma model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
+     * Selecciona la firma mediante POST y abre su detalle sin ID en la URL.
      */
-    public function actionView($id)
+    public function actionSeleccionar()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $firma = $this->findModel(Yii::$app->request->post('id'));
+        $this->guardarSeleccion($firma);
+        return $this->redirect(['view']);
     }
 
     /**
-     * Creates a new Firma model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * Muestra el detalle seleccionado. Los enlaces antiguos se redirigen a la URL sin ID.
      */
-    public function actionCreate()
+    public function actionView($id = null)
     {
-        $model = new Firma();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        if ($id !== null) {
+            $this->guardarSeleccion($this->findModel($id));
+            return $this->redirect(['view']);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        $seleccion = Yii::$app->session->get('firmaDetalleSeleccionada');
+        if (!is_array($seleccion) || ($seleccion['usuario'] ?? null) !== (int) Yii::$app->user->id) {
+            throw new NotFoundHttpException('Selecciona una firma desde el listado.');
+        }
+
+        return $this->render('view', ['model' => $this->findModel($seleccion['firma'] ?? null)]);
     }
 
-    /**
-     * Updates an existing Firma model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    private function guardarSeleccion(Firma $firma): void
     {
-        $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
+        Yii::$app->session->set('firmaDetalleSeleccionada', [
+            'usuario' => (int) Yii::$app->user->id,
+            'firma' => $firma->id,
         ]);
-    }
-
-    /**
-     * Deletes an existing Firma model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        if ($this->findModel($id)->delete() === false) {
-            throw new \yii\web\ServerErrorHttpException('No se pudo eliminar el registro.');
-        }
-
-        return $this->redirect(['index']);
     }
 
     /**
      * Finds the Firma model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
+     * @param int|string|null $id ID interno recibido por POST o desde un enlace antiguo
      * @return Firma the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -132,9 +95,6 @@ class FirmaController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La firma solicitada no existe.');
     }
-
-
-
 }
