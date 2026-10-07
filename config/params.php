@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'appName' => 'Sistema de Gestión de Contratos Electrónicos',
-    'appShortName' => 'Contratos Electrónicos',
+    'appName' => 'Sistema de gestión de contratos y convenios',
+    'appShortName' => 'Contratos y convenios',
     'adminEmail' => 'admin@example.com',
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',

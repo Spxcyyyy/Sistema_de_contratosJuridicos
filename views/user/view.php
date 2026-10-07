@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\User;
 
 $this->title = $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
@@ -10,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="m-0 contrato-titulo"><?= Html::encode($model->username) ?></h1>
         <div>
-            <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-guinda']) ?>
+            <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-primary']) ?>
             <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-outline-danger',
                 'data' => [
@@ -34,7 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'attribute' => 'status',
-                    'value' => $model->status == 10 ? 'Activo' : 'Desactivado',
+                    'format' => 'raw',
+                    'value' => $model->status == User::STATUS_ACTIVE
+                        ? '<span class="badge-estado-ok">Activo</span>'
+                        : '<span class="badge-estado-inactivo">Desactivado</span>',
                 ],
                 [
                     'attribute' => 'created_at',

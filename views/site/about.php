@@ -20,7 +20,7 @@ $this->params['meta_description'] = 'Acerca del ' . Yii::$app->params['appName']
         <?= Html::a(
             'Ir al inicio',
             Yii::$app->homeUrl,
-            ['class' => 'btn btn-outline-primary btn-lg'],
+            ['class' => 'btn btn-outline-gris btn-lg'],
         ) ?>
     </div>
 </div>

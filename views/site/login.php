@@ -10,7 +10,7 @@ use yii\bootstrap5\Html;
 
 $this->title = 'Iniciar sesión';
 $this->params['breadcrumbs'][] = $this->title;
-$this->params['meta_description'] = 'Inicia sesión para acceder al ' . Yii::$app->params['appShortName'] . '.';
+$this->params['meta_description'] = 'Inicia sesión en ' . Yii::$app->params['appShortName'] . '.';
 $htmlIcon = <<<HTML
 {label}<div class="input-group"><span class="input-group-text" aria-hidden="true">%s</span>{input}</div>{error}{hint}
 HTML;
@@ -64,7 +64,7 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
                         ])->textInput(['maxlength' => 50])->label('Usuario', $labelOptions) ?>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <?= $form->field($model, 'password', [
                             'options' => ['class' => 'mb-0'],
                             'template' => sprintf($htmlIcon, '&#128274;'),
@@ -73,10 +73,6 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
                                 'placeholder' => 'Contraseña',
                             ],
                         ])->passwordInput(['maxlength' => 50])->label('Contraseña', $labelOptions) ?>
-                    </div>
-
-                    <div class="mb-4">
-                        <?= $form->field($model, 'rememberMe')->checkbox() ?>
                     </div>
 
                     <div class="d-grid">

@@ -15,14 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contrato-index">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
         <h1 class="m-0 contrato-titulo">Contratos</h1>
-        <div>
+        <div class="d-flex flex-wrap gap-2">
+            <?= Html::a('Limpiar filtros', ['index'], ['class' => 'btn btn-outline-secondary']) ?>
             <?php if (AccessPolicy::allows('contrato/reporte')): ?>
-                <?= Html::a('Generar reporte', ['reporte'], ['class' => 'btn btn-outline-guinda me-2']) ?>
+                <?= Html::a('Generar reporte', ['reporte'], ['class' => 'btn btn-outline-primary']) ?>
             <?php endif; ?>
             <?php if (AccessPolicy::allows('contrato/create')): ?>
-                <?= Html::a('+ Nuevo contrato', ['create'], ['class' => 'btn btn-primary px-4']) ?>
+                <?= Html::a('+ Nuevo contrato', ['create'], ['class' => 'btn btn-success px-4']) ?>
             <?php endif; ?>
         </div>
     </div>
@@ -85,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         $esFirmado = in_array($model->estado, \app\models\Contrato::ESTADOS_CONCLUIDOS, true);
-                        $clase = $esFirmado ? 'badge-estado-ok' : 'badge-estado-pendiente';
+                        $clase = $esFirmado ? 'badge-estado-ok' : ($model->estado === 'Cancelado' ? 'badge-estado-inactivo' : 'badge-estado-pendiente');
                         return '<span class="' . $clase . '">' . Html::encode($model->estado) . '</span>';
                     },
                 ],

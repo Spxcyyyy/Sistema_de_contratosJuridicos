@@ -10,9 +10,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
         <h1 class="m-0 contrato-titulo">Usuarios</h1>
-        <?= Html::a('+ Nuevo usuario', ['create'], ['class' => 'btn btn-primary px-4']) ?>
+        <div class="d-flex flex-wrap gap-2">
+            <?= Html::a('Limpiar filtros', ['index'], ['class' => 'btn btn-outline-secondary']) ?>
+            <?= Html::a('+ Nuevo usuario', ['create'], ['class' => 'btn btn-success px-4']) ?>
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
@@ -42,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'status',
                     'format' => 'raw',
                     'value' => function ($model) {
-                        return $model->status == 10
+                        return $model->status == User::STATUS_ACTIVE
                             ? '<span class="badge-estado-ok">Activo</span>'
-                            : '<span class="badge-estado-pendiente">Desactivado</span>';
+                            : '<span class="badge-estado-inactivo">Desactivado</span>';
                     },
                     'filter' => [10 => 'Activo', 0 => 'Desactivado'],
                 ],

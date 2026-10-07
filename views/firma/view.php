@@ -37,7 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'nombre',
             [
                 'label' => 'Estado',
-                'value' => $model->estado === 'firmado' ? 'Firmado' : 'Pendiente',
+                'format' => 'raw',
+                'value' => $model->estado === 'firmado'
+                    ? '<span class="badge-estado-ok">Firmado</span>'
+                    : '<span class="badge-estado-pendiente">Pendiente</span>',
             ],
             [
                 'label' => 'Fecha de firma',

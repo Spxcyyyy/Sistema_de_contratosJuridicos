@@ -48,7 +48,7 @@ $firmas = $firmas ?? ($model->firmas ?: [new \app\models\Firma()]);
     <div class="form-card mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="form-card-title mb-0">Firmantes</h2>
-            <button type="button" id="btn-add-firma" class="btn btn-outline-guinda btn-sm">
+            <button type="button" id="btn-add-firma" class="btn btn-outline-success btn-sm">
                 + Agregar firmante
             </button>
         </div>

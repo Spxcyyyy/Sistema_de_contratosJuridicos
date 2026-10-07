@@ -32,6 +32,7 @@ class FirmaSearchs extends Firma
     {
         return [
             [['nombre', 'nomenclaturaContrato', 'codigoContrato'], 'string', 'max' => 50],
+            [['estado'], 'in', 'range' => ['firmado', 'pendiente']],
             [['id', 'contrato_id', 'created_at'], 'integer'],
             [['fechaRegistro'], 'date', 'format' => 'php:Y-m-d'],
         ];
@@ -97,6 +98,7 @@ class FirmaSearchs extends Firma
             'firmas.id' => $this->id,
             'firmas.contrato_id' => $this->contrato_id,
             'firmas.created_at' => $this->created_at,
+            'firmas.estado' => $this->estado,
         ]);
 
         $query->andFilterWhere(['like', 'firmas.nombre', $this->nombre])

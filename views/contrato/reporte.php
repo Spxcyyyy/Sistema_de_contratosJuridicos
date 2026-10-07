@@ -28,7 +28,7 @@ $porSeleccion = $reporte->alcance === 'seleccion';
                     </div>
                 </details>
             <?php endif; ?>
-            <?= Html::a('Cambiar selección', ['index'], ['class' => 'btn btn-sm btn-outline-guinda']) ?>
+            <?= Html::a('Cambiar selección', ['index'], ['class' => 'btn btn-sm btn-outline-gris']) ?>
         <?php else: ?>
             <h2 class="form-card-title">Rango de fechas (documento)</h2>
             <div class="row g-3 mb-3">

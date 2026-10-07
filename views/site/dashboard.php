@@ -6,8 +6,8 @@ $this->title = 'Inicio · Seguimiento de contratos';
 $this->registerCssFile('@web/css/seguimiento.css');
 $tarjetas = [
     'total' => ['Todos los contratos', 'Expedientes registrados', 'neutral'],
-    'proceso' => ['En proceso', 'Contratos por concluir', 'guinda'],
-    'firmas' => ['Firmas pendientes', 'En contratos en proceso', 'guinda'],
+    'proceso' => ['En proceso', 'Contratos por concluir', 'info'],
+    'firmas' => ['Firmas pendientes', 'En contratos en proceso', 'warning'],
     'concluidos' => ['Concluidos', 'Documentos firmados', 'success'],
     'vencidos' => ['Vencidos', 'Requieren atención', 'danger'],
     'proximos' => ['Por vencer', 'Hoy y próximos 7 días', 'warning'],
@@ -17,7 +17,7 @@ $tarjetas = [
     <div class="seguimiento-heading">
         <div><span class="seguimiento-eyebrow">CONTROL DE CONTRATOS</span><h1>Tu resumen de hoy</h1><p class="text-muted mb-0"><?= Html::encode(Yii::$app->formatter->asDate(time(), 'long')) ?> · Pendientes, vencimientos y actividad reciente.</p></div>
         <?php if (AccessPolicy::allows('contrato/create')): ?>
-            <?= Html::a('+ Nuevo contrato', ['/contrato/create'], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('+ Nuevo contrato', ['/contrato/create'], ['class' => 'btn btn-success']) ?>
         <?php endif; ?>
     </div>
     <div class="dashboard-stats">

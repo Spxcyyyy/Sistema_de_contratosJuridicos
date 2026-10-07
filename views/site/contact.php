@@ -29,7 +29,7 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
         <?= Html::a(
             'Enviar otro mensaje',
             ['contact'],
-            ['class' => 'btn btn-outline-primary btn-lg'],
+            ['class' => 'btn btn-outline-gris btn-lg'],
         ) ?>
     </div>
 </div>

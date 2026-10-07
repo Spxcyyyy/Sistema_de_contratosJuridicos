@@ -23,7 +23,7 @@ $this->title = 'Contrato ' . $model->codigo;
         </div>
         <div class="contrato-actions">
             <?php if (AccessPolicy::allows('contrato/update')): ?>
-                <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-guinda']) ?>
+                <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-primary']) ?>
             <?php endif; ?>
             <?php if (AccessPolicy::allows('contrato/delete')): ?>
                 <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
@@ -58,7 +58,7 @@ $this->title = 'Contrato ' . $model->codigo;
                     'format' => 'raw',
                     'value' => function ($model) {
                     $esFirmado = strtolower($model->estado) === 'firmado' || $model->estado === 'Todas las firmas recabadas';
-                    $clase = $esFirmado ? 'badge-estado-ok' : 'badge-estado-pendiente';
+                    $clase = $esFirmado ? 'badge-estado-ok' : ($model->estado === 'Cancelado' ? 'badge-estado-inactivo' : 'badge-estado-pendiente');
                     return '<span id="contrato-estado-badge" class="' . $clase . '">' . Html::encode($model->estado) . '</span>';
                 },
                 ],
@@ -108,11 +108,11 @@ $this->title = 'Contrato ' . $model->codigo;
                             </td>
                             <td class="accion-cell text-end">
                                 <?php if ($firma->estado === 'firmado' && AccessPolicy::allows('contrato/desmarcar-firmado')): ?>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-estado-firma" data-url="<?= Html::encode(Url::to(['contrato/desmarcar-firmado', 'id' => $firma->id])) ?>">
+                                    <button type="button" class="btn btn-sm btn-outline-warning btn-estado-firma" data-url="<?= Html::encode(Url::to(['contrato/desmarcar-firmado', 'id' => $firma->id])) ?>">
                                         Desmarcar firma
                                     </button>
                                 <?php elseif ($firma->estado !== 'firmado' && AccessPolicy::allows('contrato/marcar-firmado')): ?>
-                                    <button type="button" class="btn btn-sm btn-primary btn-estado-firma" data-url="<?= Html::encode(Url::to(['contrato/marcar-firmado', 'id' => $firma->id])) ?>">
+                                    <button type="button" class="btn btn-sm btn-success btn-estado-firma" data-url="<?= Html::encode(Url::to(['contrato/marcar-firmado', 'id' => $firma->id])) ?>">
                                         Marcar como firmado
                                     </button>
                                 <?php endif; ?>
@@ -135,7 +135,7 @@ $this->title = 'Contrato ' . $model->codigo;
 
         <?php if (AccessPolicy::allows('contrato/add-nota')): ?>
             <details class="nota-composer">
-            <summary class="btn btn-outline-guinda">+ Nueva nota</summary>
+            <summary class="btn btn-outline-primary">+ Nueva nota</summary>
             <form method="post" action="<?= Url::to(['contrato/add-nota', 'id' => $model->id]) ?>" class="nota-composer-form">
                 <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
                 <label for="nota-contenido" class="form-label fw-semibold">¿Qué necesitas registrar?</label>
