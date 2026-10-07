@@ -562,32 +562,3 @@ html:not([data-bs-theme="dark"]) .stat-card.stat-ok .stat-value { color: var(--e
 html:not([data-bs-theme="dark"]) .quick-access-icon {
     color: var(--guinda);
 }
-
-/* ============================================
-   Footer institucional
-   ============================================ */
-
-html:not([data-bs-theme="dark"]) .gov-footer {
-    border-top: 3px solid var(--guinda);
-}
-
-.gov-footer .footer-heading {
-    font-size: .8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-    margin-bottom: .75rem;
-}
-
-html:not([data-bs-theme="dark"]) .gov-footer .footer-heading {
-    color: var(--guinda);
-}
-
-.gov-footer a {
-    color: var(--bs-secondary-color);
-    text-decoration: none;
-}
-
-.gov-footer a:hover {
-    text-decoration: underline;
-}
