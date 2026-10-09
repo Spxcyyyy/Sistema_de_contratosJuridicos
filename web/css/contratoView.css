@@ -69,7 +69,3 @@ html:not([data-bs-theme="dark"]) .firmas-table td {
     vertical-align: middle;
     border-color: #f0f0f0;
 }
-
-html:not([data-bs-theme="dark"]) .contrato-actions .btn {
-    margin-left: 8px;
-}

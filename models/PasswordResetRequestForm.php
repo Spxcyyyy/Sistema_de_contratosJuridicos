@@ -2,39 +2,37 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
-use app\models\User;
-use app\models\PasswordResetRequest;
 
 class PasswordResetRequestForm extends Model
 {
-    public $email;
+    public $username;
 
     public function rules()
     {
         return [
-            [['email'], 'string', 'max' => 50],
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'exist',
+            [['username'], 'string', 'max' => 50],
+            ['username', 'trim'],
+            ['username', 'required'],
+            ['username', 'exist',
                 'targetClass' => User::class,
                 'filter' => ['status' => User::STATUS_ACTIVE],
-                'message' => 'No existe un usuario con este correo.',
+                'message' => 'No existe un usuario activo con ese nombre de usuario.',
             ],
         ];
     }
 
-    /**
-     * Ya no envía correo: crea la solicitud para que el admin la vea en su CRUD.
-     */
-    public function sendEmail()
+    public function attributeLabels(): array
     {
-        $user = User::findOne([
-            'status' => User::STATUS_ACTIVE,
-            'email' => $this->email,
-        ]);
+        return ['username' => 'Nombre de usuario'];
+    }
+
+    /**
+     * Registra la solicitud para que el administrador la vea en Usuarios.
+     */
+    public function createRequest(): bool
+    {
+        $user = User::findByUsername($this->username);
 
         if (!$user) {
             return false;
@@ -50,7 +48,7 @@ class PasswordResetRequestForm extends Model
 
         $request = new PasswordResetRequest();
         $request->user_id = $user->id;
-        $request->email = $this->email;
+        $request->email = $user->email;
         $request->status = PasswordResetRequest::STATUS_PENDING;
         $request->created_at = time();
 

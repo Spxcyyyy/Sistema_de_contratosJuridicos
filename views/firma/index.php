@@ -3,6 +3,7 @@
 use app\models\Firma;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\components\ListReturnUrl;
 
 /** @var yii\web\View $this */
 /** @var app\models\searchs\FirmaSearchs $searchModel */
@@ -10,6 +11,7 @@ use yii\grid\GridView;
 
 $this->title = 'Firmas';
 $this->params['breadcrumbs'][] = $this->title;
+$listado = Yii::$app->request->getQueryString();
 ?>
 <div class="firma-index">
 
@@ -20,9 +22,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p class="text-muted">Agrega, edita o quita firmantes desde el contrato correspondiente.</p>
 
+    <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'filterUrl' => \yii\helpers\Url::to(['index']),
+        'layout' => "{summary}\n<div class=\"table-responsive\">{items}</div>\n{pager}",
+        'summary' => 'Mostrando {begin}–{end} de {totalCount} firmas',
+        'pager' => [
+            'class' => \yii\bootstrap5\LinkPager::class,
+            'options' => ['class' => 'listado-paginacion', 'aria-label' => 'Páginas de firmas'],
+            'prevPageLabel' => 'Anterior',
+            'nextPageLabel' => 'Siguiente',
+            'maxButtonCount' => 5,
+        ],
+        'tableOptions' => ['class' => 'table table-hover mb-0 grid-view'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -55,6 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['class' => 'text-nowrap'],
                 'value' => static fn(Firma $model) => Html::beginForm(['/firma/seleccionar'], 'post', ['class' => 'd-inline'])
                     . Html::hiddenInput('id', $model->id)
+                    . Html::hiddenInput(ListReturnUrl::PARAM, $listado)
                     . Html::submitButton('Ver', [
                         'class' => 'btn btn-sm btn-outline-primary',
                         'aria-label' => 'Ver firma de ' . $model->nombre,
@@ -63,5 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+    </div>
 
 </div>

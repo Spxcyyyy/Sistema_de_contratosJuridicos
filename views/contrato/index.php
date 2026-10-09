@@ -3,15 +3,22 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 use app\components\AccessPolicy;
+use app\components\ListReturnUrl;
 use yii\grid\ActionColumn;
+use yii\helpers\Url;
 
 $this->registerCssFile('@web/css/contrato.css');
+if (AccessPolicy::allows('contrato/delete')) {
+    \yii\bootstrap5\BootstrapPluginAsset::register($this);
+}
 if (AccessPolicy::allows('contrato/reporte')) {
     $this->registerJsFile('@web/js/seleccion-reportes.js', ['depends' => [\yii\web\YiiAsset::class]]);
 }
 
 $this->title = 'Contratos';
 $this->params['breadcrumbs'][] = $this->title;
+$iconoEliminar = (new ActionColumn(['template' => '']))->icons['trash'];
+$listado = Yii::$app->request->getQueryString();
 ?>
 <div class="contrato-index">
 
@@ -43,12 +50,20 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <?php endif; ?>
     <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
-        <div class="table-responsive">
         <?= GridView::widget([
             'id' => 'contratos-grid',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'filterUrl' => \yii\helpers\Url::to(['index']),
+            'layout' => "{summary}\n<div class=\"table-responsive\">{items}</div>\n{pager}",
+            'summary' => 'Mostrando {begin}–{end} de {totalCount} contratos',
+            'pager' => [
+                'class' => \yii\bootstrap5\LinkPager::class,
+                'options' => ['class' => 'listado-paginacion', 'aria-label' => 'Páginas de contratos'],
+                'prevPageLabel' => 'Anterior',
+                'nextPageLabel' => 'Siguiente',
+                'maxButtonCount' => 5,
+            ],
             'tableOptions' => ['class' => 'table table-hover mb-0 grid-view'],
             'columns' => [
                 [
@@ -92,15 +107,76 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'class' => ActionColumn::className(),
+                    'urlCreator' => static function ($action, $model) use ($listado) {
+                        $route = [$action, 'id' => $model->id];
+                        if ($listado !== '' && in_array($action, ['view', 'update'], true)) {
+                            $route[ListReturnUrl::PARAM] = $listado;
+                        }
+                        return Url::to($route);
+                    },
                     'visibleButtons' => [
                         'view' => AccessPolicy::allows('contrato/view'),
                         'update' => AccessPolicy::allows('contrato/update'),
                         'delete' => AccessPolicy::allows('contrato/delete'),
                     ],
                     'template' => '{view} {update} {delete}',
+                    'buttons' => [
+                        'delete' => static fn($url, $model) => Html::a($iconoEliminar, '#confirmar-eliminar-contrato', [
+                            'class' => 'grid-delete-action',
+                            'title' => 'Eliminar',
+                            'data-bs-toggle' => 'modal',
+                            'data-bs-target' => '#confirmar-eliminar-contrato',
+                            'data-url' => $url,
+                            'data-codigo' => $model->codigo,
+                            'data-pjax' => '0',
+                            'aria-label' => 'Eliminar contrato ' . $model->codigo,
+                        ]),
+                    ],
                 ],
             ],
         ]); ?>
+    </div>
+
+    <?php if (AccessPolicy::allows('contrato/delete')): ?>
+    <div class="modal fade" id="confirmar-eliminar-contrato" tabindex="-1" aria-labelledby="titulo-eliminar-contrato" aria-describedby="mensaje-eliminar-contrato" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="titulo-eliminar-contrato">Eliminar contrato</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <?= Html::beginForm('#', 'post', ['id' => 'form-eliminar-contrato']) ?>
+                    <div class="modal-body" id="mensaje-eliminar-contrato">
+                        ¿Seguro que deseas eliminar el contrato <strong id="codigo-eliminar-contrato"></strong>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <?= Html::submitButton('Eliminar contrato', ['class' => 'btn btn-danger', 'id' => 'confirmar-eliminar-boton', 'disabled' => true]) ?>
+                    </div>
+                <?= Html::endForm() ?>
+            </div>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('confirmar-eliminar-contrato');
+        const formulario = document.getElementById('form-eliminar-contrato');
+        const codigo = document.getElementById('codigo-eliminar-contrato');
+        const confirmar = document.getElementById('confirmar-eliminar-boton');
+
+        modal.addEventListener('show.bs.modal', function (event) {
+            const boton = event.relatedTarget;
+            if (!boton || !boton.dataset.url) return;
+            formulario.action = boton.dataset.url;
+            codigo.textContent = boton.dataset.codigo;
+            confirmar.disabled = false;
+        });
+        modal.addEventListener('hidden.bs.modal', function () {
+            formulario.action = '#';
+            codigo.textContent = '';
+            confirmar.disabled = true;
+        });
+    });
+    </script>
+    <?php endif; ?>
 </div>

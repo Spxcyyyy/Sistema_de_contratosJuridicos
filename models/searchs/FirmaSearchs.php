@@ -63,8 +63,18 @@ class FirmaSearchs extends Firma
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+                'pageSizeParam' => false,
+                'pageParam' => 'pagina',
+            ],
             'sort' => [
+                'defaultOrder' => ['fechaRegistro' => SORT_DESC, 'id' => SORT_DESC],
                 'attributes' => [
+                    'id' => [
+                        'asc' => ['firmas.id' => SORT_ASC],
+                        'desc' => ['firmas.id' => SORT_DESC],
+                    ],
                     'nomenclaturaContrato' => [
                         'asc' => ['contratos.nomenclatura' => SORT_ASC],
                         'desc' => ['contratos.nomenclatura' => SORT_DESC],

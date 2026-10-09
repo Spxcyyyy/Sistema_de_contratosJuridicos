@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Contrato;
 use app\models\Firma;
 use app\models\searchs\ContratoSearchs;
+use app\components\ListReturnUrl;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -84,7 +85,7 @@ class ContratoController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $firmas = $this->cargarFirmas($model);
             if ($guardado = $this->guardarContrato($model, $firmas)) {
-                return $this->redirect(['view', 'id' => $guardado->id]);
+                return $this->redirect(ListReturnUrl::preserve(['view', 'id' => $guardado->id]));
             }
         }
         return $this->render('update', ['model' => $model, 'firmas' => $firmas]);
@@ -439,7 +440,7 @@ class ContratoController extends Controller
             Yii::$app->session->setFlash('error', 'No se pudo guardar la nota.');
         }
 
-        return $this->redirect(['view', 'id' => $contrato->id]);
+        return $this->redirect(ListReturnUrl::preserve(['view', 'id' => $contrato->id]));
     }
 
 }

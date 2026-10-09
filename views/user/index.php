@@ -3,10 +3,13 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\grid\ActionColumn;
+use yii\helpers\Url;
+use app\components\ListReturnUrl;
 use app\models\User;
 
 $this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
+$listado = Yii::$app->request->getQueryString();
 ?>
 <div class="user-index">
 
@@ -72,6 +75,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'class' => ActionColumn::className(),
+                    'urlCreator' => static function ($action, $model) use ($listado) {
+                        $route = [$action, 'id' => $model->id];
+                        if ($listado !== '' && in_array($action, ['view', 'update'], true)) {
+                            $route[ListReturnUrl::PARAM] = $listado;
+                        }
+                        return Url::to($route);
+                    },
                     'template' => '{view} {update} {delete}',
                 ],
             ],

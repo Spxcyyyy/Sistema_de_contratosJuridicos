@@ -124,38 +124,6 @@ class User extends SoftDeleteRecord implements IdentityInterface
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
 
-    public static function findByPasswordResetToken($token)
-    {
-        if (!static::isPasswordResetTokenValid($token)) {
-            return null;
-        }
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
-    }
-
-    public static function isPasswordResetTokenValid($token)
-    {
-        if (empty($token)) {
-            return false;
-        }
-        $expire = Yii::$app->params['user.passwordResetTokenExpire'] ?? 3600;
-        $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
-        return $timestamp + $expire >= time();
-    }
-
-    public function generatePasswordResetToken()
-    {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
-    }
-
-    public function removePasswordResetToken()
-    {
-        $this->password_reset_token = null;
-    }
-
     public function isAdmin()
     {
         return $this->role === self::ROLE_ADMIN;

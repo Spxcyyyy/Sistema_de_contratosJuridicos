@@ -2,25 +2,15 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\models\User;
+use app\components\ListReturnUrl;
 
 $this->title = $model->username;
-$this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ListReturnUrl::url('user/index')];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-view">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="m-0 contrato-titulo"><?= Html::encode($model->username) ?></h1>
-        <div>
-            <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-primary']) ?>
-            <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-outline-danger',
-                'data' => [
-                    'confirm' => '¿Seguro que deseas eliminar este usuario?',
-                    'method' => 'post',
-                ],
-            ]) ?>
-        </div>
-    </div>
+    <?= Html::a('&larr; Regresar', ListReturnUrl::url('user/index'), ['class' => 'btn-back']) ?>
+    <h1 class="contrato-titulo mb-4"><?= Html::encode($model->username) ?></h1>
 
     <div class="form-card">
         <?= DetailView::widget([

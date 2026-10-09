@@ -91,10 +91,10 @@ Si el puerto 8000 o 3306 está ocupado, cambia el puerto del host en `docker-com
 - `config/db.php` contiene la conexión de la aplicación y la consola; debe coincidir con MariaDB.
 - Las migraciones crean y actualizan las tablas.
 - El volumen `db_data` conserva los datos entre reinicios. `docker compose down` detiene el entorno; añadir `-v` elimina sus volúmenes y los datos almacenados.
-- El correo usa `useFileTransport = true`: se guarda en `runtime/mail`.
+- La recuperación de contraseña identifica la cuenta por nombre de usuario y registra una solicitud pendiente en Usuarios para que un administrador la atienda.
 - La zona horaria configurada es `America/Mexico_City`.
 
-Las credenciales incluidas son de desarrollo. Para desplegar en otro entorno, configura credenciales propias, una clave `cookieValidationKey` exclusiva, HTTPS y el transporte de correo que corresponda. El directorio público del servidor debe ser `web/`.
+Las credenciales incluidas son de desarrollo. Para desplegar en otro entorno, configura credenciales propias, una clave `cookieValidationKey` exclusiva y HTTPS. El directorio público del servidor debe ser `web/`.
 
 ### Cambios durante el desarrollo
 

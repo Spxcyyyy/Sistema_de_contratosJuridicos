@@ -2,6 +2,7 @@
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 use app\models\User;
+use app\components\ListReturnUrl;
 
 $isCreate = $model->isNewRecord;
 ?>
@@ -38,7 +39,7 @@ $isCreate = $model->isNewRecord;
     </div>
 
     <div class="form-actions">
-        <?= Html::a('Cancelar', ['index'], ['class' => 'btn btn-link text-secondary']) ?>
+        <?= Html::a('Cancelar', ListReturnUrl::url('user/index'), ['class' => 'btn btn-link text-secondary']) ?>
         <?= Html::submitButton($isCreate ? 'Crear usuario' : 'Guardar cambios', ['class' => 'btn btn-primary px-4']) ?>
     </div>
 

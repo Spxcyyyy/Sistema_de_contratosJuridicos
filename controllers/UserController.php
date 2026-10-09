@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\User;
 use app\models\searchs\UserSearchs;
+use app\components\ListReturnUrl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -72,7 +73,7 @@ class UserController extends Controller
             }
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Usuario actualizado correctamente.');
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(ListReturnUrl::preserve(['view', 'id' => $model->id]));
             }
         }
 
@@ -107,7 +108,6 @@ class UserController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $user->setPassword($model->newPassword);
-            $user->removePasswordResetToken();
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 if ($user->save() && (!$request || $request->markResolved(Yii::$app->user->id))) {

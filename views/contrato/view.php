@@ -4,6 +4,7 @@ $this->registerCssFile('@web/css/seguimiento.css');
 
 use yii\helpers\Html;
 use app\components\AccessPolicy;
+use app\components\ListReturnUrl;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
@@ -14,27 +15,11 @@ $this->title = 'Contrato ' . $model->codigo;
 ?>
 <div class="contrato-view">
 
-    <?= Html::a('&larr; Regresar', ['index'], ['class' => 'btn-back']) ?>
+    <?= Html::a('&larr; Regresar', ListReturnUrl::url('contrato/index'), ['class' => 'btn-back']) ?>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="m-0 contrato-titulo"><?= Html::encode($model->codigo) ?></h1>
-            <p class="text-muted mb-0"><?= Html::encode($model->nomenclatura) ?></p>
-        </div>
-        <div class="contrato-actions">
-            <?php if (AccessPolicy::allows('contrato/update')): ?>
-                <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-primary']) ?>
-            <?php endif; ?>
-            <?php if (AccessPolicy::allows('contrato/delete')): ?>
-                <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-outline-danger',
-                'data' => [
-                    'confirm' => '¿Seguro que deseas eliminar este contrato?',
-                    'method' => 'post',
-                ],
-            ]) ?>
-            <?php endif; ?>
-        </div>
+    <div class="mb-4">
+        <h1 class="m-0 contrato-titulo"><?= Html::encode($model->codigo) ?></h1>
+        <p class="text-muted mb-0"><?= Html::encode($model->nomenclatura) ?></p>
     </div>
 
     <div class="form-card mb-4">
@@ -136,7 +121,7 @@ $this->title = 'Contrato ' . $model->codigo;
         <?php if (AccessPolicy::allows('contrato/add-nota')): ?>
             <details class="nota-composer">
             <summary class="btn btn-outline-primary">+ Nueva nota</summary>
-            <form method="post" action="<?= Url::to(['contrato/add-nota', 'id' => $model->id]) ?>" class="nota-composer-form">
+            <form method="post" action="<?= Url::to(ListReturnUrl::preserve(['contrato/add-nota', 'id' => $model->id])) ?>" class="nota-composer-form">
                 <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
                 <label for="nota-contenido" class="form-label fw-semibold">¿Qué necesitas registrar?</label>
                 <textarea id="nota-contenido" name="contenido" class="form-control" rows="4" maxlength="50" aria-describedby="nota-ayuda" placeholder="Escribe una observación o un detalle importante del contrato…"
@@ -181,11 +166,10 @@ $this->title = 'Contrato ' . $model->codigo;
     <?php if (AccessPolicy::allows('contrato/actividad') && $actividadProvider !== null): ?>
     <section class="seguimiento-panel mt-4 mb-4" aria-labelledby="historial-title">
         <div class="seguimiento-panel-heading"><h2 id="historial-title">Historial de actividad</h2></div>
-        <p class="text-muted small">Cambios registrados desde la incorporación del historial.</p>
         <?= \yii\widgets\ListView::widget([
             'dataProvider' => $actividadProvider,
-            'itemView' => '_actividad',
-            'layout' => '{summary}{items}{pager}',
+            'itemView' => '_actividad_contrato',
+            'layout' => '{items}{pager}',
             'emptyText' => 'Aún no hay cambios registrados para este contrato.',
         ]) ?>
     </section>

@@ -26,6 +26,8 @@
 .actividad-body { min-width:0; flex:1; }.actividad-heading { display:flex; gap:12px; justify-content:space-between; flex-wrap:wrap; }
 .actividad-heading strong { font-size:.9rem; color:#3d3d3d; }.actividad-heading time,.actividad-meta { font-size:.8rem; color:#757575; }
 .actividad-meta { margin:6px 0 0; overflow-wrap:anywhere; }.actividad-meta a { color:#424242; }
+.actividad-item-compacto { padding:9px 0; }
+.actividad-item-compacto .actividad-meta { margin:2px 0 0; color:#3d3d3d; font-size:.85rem; line-height:1.35; }
 .actividad-details { margin-top:10px; font-size:.85rem; }.actividad-details summary { color:#424242; cursor:pointer; }
 .actividad-cambios { background:#f8f8f8; border-radius:8px; padding:12px; margin:10px 0 0; }.actividad-cambios > div + div { margin-top:10px; }
 .actividad-cambios dd { margin:3px 0 0; white-space:pre-wrap; overflow-wrap:anywhere; }.actividad-cambios dd > span:first-child { color:#707070; }
