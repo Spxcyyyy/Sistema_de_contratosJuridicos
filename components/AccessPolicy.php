@@ -9,8 +9,8 @@ use yii\filters\AccessControl;
 /** Lista explícita de permisos compartida por los filtros de los controladores y las acciones visibles en la interfaz. */
 final class AccessPolicy
 {
-    private const READERS = [User::ROLE_ADMIN, User::ROLE_USUARIO, User::ROLE_RECABADOR];
-    private const EDITORS = [User::ROLE_ADMIN, User::ROLE_USUARIO];
+    private const READERS = [User::ROLE_ADMIN, User::ROLE_JURIDICOS, User::ROLE_RECABADOR];
+    private const EDITORS = [User::ROLE_ADMIN, User::ROLE_JURIDICOS];
     private const COLLECTORS = [User::ROLE_ADMIN, User::ROLE_RECABADOR];
 
     public const PERMISSIONS = [

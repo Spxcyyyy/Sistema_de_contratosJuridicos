@@ -3,11 +3,11 @@
 Los behaviors de ContratoController, FirmaController y UserController usan
 AccessPolicy::accessBehavior(). La política consulta el rol de la cuenta y
 deniega cualquier acción que no esté incluida expresamente. SiteController
-mantiene públicas las páginas de acceso, recuperación, contacto, información
+mantiene públicas las páginas de acceso, recuperación, información
 y errores; su panel requiere una cuenta activa con un rol reconocido.
 El inicio del Recabador redirige al listado de contratos; puede agregar notas y marcar o desmarcar firmas dentro de un contrato.
 
-| Acción | Administrador | Usuario | Recabador |
+| Acción | Administrador | Jurídicos | Recabador |
 | --- | --- | --- | --- |
 | Consultar listado y detalle de contratos | Sí | Sí | Sí |
 | Consultar Firmas, historial general o del contrato y reportes | Sí | Sí | No |

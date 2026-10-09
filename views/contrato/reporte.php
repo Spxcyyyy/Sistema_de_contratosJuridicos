@@ -28,7 +28,7 @@ $porSeleccion = $reporte->alcance === 'seleccion';
                     </div>
                 </details>
             <?php endif; ?>
-            <?= Html::a('Cambiar selección', ['index'], ['class' => 'btn btn-sm btn-outline-guinda']) ?>
+            <?= Html::a('Cambiar selección', ['index'], ['class' => 'btn btn-sm btn-outline-gris']) ?>
         <?php else: ?>
             <h2 class="form-card-title">Rango de fechas (documento)</h2>
             <div class="row g-3 mb-3">
@@ -50,7 +50,7 @@ $porSeleccion = $reporte->alcance === 'seleccion';
         <hr>
         <h2 class="form-card-title">Formato</h2>
         <div class="mb-4"><label for="reporte-formato" class="visually-hidden">Formato del archivo</label>
-            <?= Html::dropDownList('formato', is_string($reporte->formato) ? $reporte->formato : '', ['pdf' => 'PDF', 'xlsx' => 'Excel (.xlsx)', 'csv' => 'CSV'], ['id' => 'reporte-formato', 'class' => 'form-select', 'required' => true]) ?>
+            <?= Html::dropDownList('formato', is_string($reporte->formato) ? $reporte->formato : '', ['pdf' => 'PDF', 'xlsx' => 'Excel (.xlsx)'], ['id' => 'reporte-formato', 'class' => 'form-select', 'required' => true]) ?>
         </div>
         <div class="form-actions">
             <?= Html::a('Cancelar', ['index'], ['class' => 'btn btn-link text-secondary']) ?>

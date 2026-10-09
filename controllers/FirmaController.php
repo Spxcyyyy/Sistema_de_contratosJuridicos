@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Firma;
 use app\models\searchs\FirmaSearchs;
+use app\components\ListReturnUrl;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -52,7 +53,8 @@ class FirmaController extends Controller
     public function actionSeleccionar()
     {
         $firma = $this->findModel(Yii::$app->request->post('id'));
-        $this->guardarSeleccion($firma);
+        $listado = $this->request->post(ListReturnUrl::PARAM);
+        $this->guardarSeleccion($firma, is_string($listado) ? $listado : '');
         return $this->redirect(['view']);
     }
 
@@ -71,14 +73,18 @@ class FirmaController extends Controller
             throw new NotFoundHttpException('Selecciona una firma desde el listado.');
         }
 
-        return $this->render('view', ['model' => $this->findModel($seleccion['firma'] ?? null)]);
+        return $this->render('view', [
+            'model' => $this->findModel($seleccion['firma'] ?? null),
+            'listado' => $seleccion['listado'] ?? '',
+        ]);
     }
 
-    private function guardarSeleccion(Firma $firma): void
+    private function guardarSeleccion(Firma $firma, string $listado = ''): void
     {
         Yii::$app->session->set('firmaDetalleSeleccionada', [
             'usuario' => (int) Yii::$app->user->id,
             'firma' => $firma->id,
+            'listado' => $listado,
         ]);
     }
 

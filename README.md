@@ -9,7 +9,7 @@ Sistema para registrar contratos jurídicos, administrar firmantes y dar seguimi
 - Filtros por los estados existentes y por fecha en el listado de contratos.
 - Avisos de vencimiento y panel de seguimiento según el rol.
 - Notas e historial de actividad asociado a cada contrato.
-- Reportes en PDF, Excel y CSV.
+- Reportes en PDF y Excel.
 - Administración de usuarios y solicitudes de restablecimiento de contraseña.
 - URLs sencillas: contratos identificados por su código, usuarios mediante referencias públicas y detalle de firmas en `/firmas/detalle`.
 - Eliminación lógica: los registros permanecen en la base con `status_registro = 'eliminado'` y se ocultan en las consultas normales.
@@ -19,13 +19,13 @@ Sistema para registrar contratos jurídicos, administrar firmantes y dar seguimi
 - PHP 8.2 o superior según `composer.json`; Docker incluye PHP 8.5 con Apache.
 - Yii 2, Bootstrap 5 y JavaScript.
 - MariaDB 11 en Docker y Composer para dependencias PHP.
-- Dompdf para PDF y PhpSpreadsheet para Excel y CSV.
+- Dompdf para PDF y PhpSpreadsheet para Excel.
 
 Las versiones concretas de las dependencias están fijadas en `composer.lock`.
 
 ## Permisos
 
-| Acción | Administrador | Usuario | Recabador |
+| Acción | Administrador | Jurídicos | Recabador |
 | --- | --- | --- | --- |
 | Ver listado y detalle de contratos | Sí | Sí | Sí |
 | Crear y editar contratos y sus firmantes | Sí | Sí | No |
@@ -91,10 +91,10 @@ Si el puerto 8000 o 3306 está ocupado, cambia el puerto del host en `docker-com
 - `config/db.php` contiene la conexión de la aplicación y la consola; debe coincidir con MariaDB.
 - Las migraciones crean y actualizan las tablas.
 - El volumen `db_data` conserva los datos entre reinicios. `docker compose down` detiene el entorno; añadir `-v` elimina sus volúmenes y los datos almacenados.
-- El correo usa `useFileTransport = true`: se guarda en `runtime/mail`.
+- La recuperación de contraseña identifica la cuenta por nombre de usuario y registra una solicitud pendiente en Usuarios para que un administrador la atienda.
 - La zona horaria configurada es `America/Mexico_City`.
 
-Las credenciales incluidas son de desarrollo. Para desplegar en otro entorno, configura credenciales propias, una clave `cookieValidationKey` exclusiva, HTTPS y el transporte de correo que corresponda. El directorio público del servidor debe ser `web/`.
+Las credenciales incluidas son de desarrollo. Para desplegar en otro entorno, configura credenciales propias, una clave `cookieValidationKey` exclusiva y HTTPS. El directorio público del servidor debe ser `web/`.
 
 ### Cambios durante el desarrollo
 

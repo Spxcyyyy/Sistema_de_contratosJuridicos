@@ -32,6 +32,7 @@ class FirmaSearchs extends Firma
     {
         return [
             [['nombre', 'nomenclaturaContrato', 'codigoContrato'], 'string', 'max' => 50],
+            [['estado'], 'in', 'range' => ['firmado', 'pendiente']],
             [['id', 'contrato_id', 'created_at'], 'integer'],
             [['fechaRegistro'], 'date', 'format' => 'php:Y-m-d'],
         ];
@@ -62,8 +63,18 @@ class FirmaSearchs extends Firma
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+                'pageSizeParam' => false,
+                'pageParam' => 'pagina',
+            ],
             'sort' => [
+                'defaultOrder' => ['fechaRegistro' => SORT_DESC, 'id' => SORT_DESC],
                 'attributes' => [
+                    'id' => [
+                        'asc' => ['firmas.id' => SORT_ASC],
+                        'desc' => ['firmas.id' => SORT_DESC],
+                    ],
                     'nomenclaturaContrato' => [
                         'asc' => ['contratos.nomenclatura' => SORT_ASC],
                         'desc' => ['contratos.nomenclatura' => SORT_DESC],
@@ -97,6 +108,7 @@ class FirmaSearchs extends Firma
             'firmas.id' => $this->id,
             'firmas.contrato_id' => $this->contrato_id,
             'firmas.created_at' => $this->created_at,
+            'firmas.estado' => $this->estado,
         ]);
 
         $query->andFilterWhere(['like', 'firmas.nombre', $this->nombre])

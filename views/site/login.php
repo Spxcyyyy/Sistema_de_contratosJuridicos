@@ -10,7 +10,7 @@ use yii\bootstrap5\Html;
 
 $this->title = 'Iniciar sesión';
 $this->params['breadcrumbs'][] = $this->title;
-$this->params['meta_description'] = 'Inicia sesión para acceder al ' . Yii::$app->params['appShortName'] . '.';
+$this->params['meta_description'] = 'Inicia sesión en ' . Yii::$app->params['appShortName'] . '.';
 $htmlIcon = <<<HTML
 {label}<div class="input-group"><span class="input-group-text" aria-hidden="true">%s</span>{input}</div>{error}{hint}
 HTML;
@@ -23,12 +23,13 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
             <!-- Brand panel -->
             <div class="col-md-5 d-none d-md-flex login-brand-panel text-white">
                 <div class="d-flex flex-column justify-content-between p-4 p-lg-5 w-100">
-                    <div class="d-flex align-items-center gap-2">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.4"/>
-                            <circle cx="12" cy="12" r="7.6" stroke="currentColor" stroke-width="1" stroke-dasharray="1.4 2"/>
-                            <path d="M9 12.6l2 2 4.3-4.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    <div class="d-flex flex-column align-items-start gap-3">
+                        <span class="login-logo-frame">
+                            <?= Html::img(Yii::getAlias('@web/images/logo-2021-2027.png'), [
+                                'class' => 'login-brand-logo',
+                                'alt' => 'Secretaría de Educación del Estado de Zacatecas',
+                            ]) ?>
+                        </span>
                         <span class="fw-semibold"><?= Html::encode(Yii::$app->params['appShortName']) ?></span>
                     </div>
                     <div>
@@ -64,7 +65,7 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
                         ])->textInput(['maxlength' => 50])->label('Usuario', $labelOptions) ?>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <?= $form->field($model, 'password', [
                             'options' => ['class' => 'mb-0'],
                             'template' => sprintf($htmlIcon, '&#128274;'),
@@ -73,10 +74,6 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
                                 'placeholder' => 'Contraseña',
                             ],
                         ])->passwordInput(['maxlength' => 50])->label('Contraseña', $labelOptions) ?>
-                    </div>
-
-                    <div class="mb-4">
-                        <?= $form->field($model, 'rememberMe')->checkbox() ?>
                     </div>
 
                     <div class="d-grid">

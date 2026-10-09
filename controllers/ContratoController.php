@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Contrato;
 use app\models\Firma;
 use app\models\searchs\ContratoSearchs;
+use app\components\ListReturnUrl;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -14,7 +15,6 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use yii\helpers\Html;
 
 /**
@@ -84,7 +84,7 @@ class ContratoController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $firmas = $this->cargarFirmas($model);
             if ($guardado = $this->guardarContrato($model, $firmas)) {
-                return $this->redirect(['view', 'id' => $guardado->id]);
+                return $this->redirect(ListReturnUrl::preserve(['view', 'id' => $guardado->id]));
             }
         }
         return $this->render('update', ['model' => $model, 'firmas' => $firmas]);
@@ -255,7 +255,6 @@ class ContratoController extends Controller
                 } else {
                     return match ($reporte->formato) {
                         'xlsx' => $this->generarExcel($contratos, $reporte->columnas),
-                        'csv' => $this->generarCsv($contratos, $reporte->columnas),
                         default => $this->generarPdf($contratos, $reporte->columnas),
                     };
                 }
@@ -346,40 +345,6 @@ class ContratoController extends Controller
         return ob_get_clean();
     }
 
-    private function generarCsv($contratos, $columnas)
-    {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        $col = 1;
-        foreach ($columnas as $key) {
-            $sheet->setCellValueExplicit([$col, 1], $this->columnasDisponibles[$key], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $col++;
-        }
-
-        $row = 2;
-        foreach ($contratos as $contrato) {
-            $col = 1;
-            foreach ($columnas as $key) {
-                $valor = (string) $this->formatearValor($contrato, $key);
-                if (preg_match('/^[=+@\x09\x0a\x0d-]/', $valor)) { $valor = "'" . $valor; }
-                $sheet->setCellValueExplicit([$col, $row], $valor, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                $col++;
-            }
-            $row++;
-        }
-
-        $writer = new Csv($spreadsheet);
-
-        Yii::$app->response->format = Response::FORMAT_RAW;
-        Yii::$app->response->headers->set('Content-Type', 'text/csv');
-        Yii::$app->response->headers->set('Content-Disposition', 'attachment; filename="contratos_' . date('Y-m-d') . '.csv"');
-
-        ob_start();
-        $writer->save('php://output');
-        return ob_get_clean();
-    }
-
     public function actionMarcarFirmado($id)
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -439,7 +404,7 @@ class ContratoController extends Controller
             Yii::$app->session->setFlash('error', 'No se pudo guardar la nota.');
         }
 
-        return $this->redirect(['view', 'id' => $contrato->id]);
+        return $this->redirect(ListReturnUrl::preserve(['view', 'id' => $contrato->id]));
     }
 
 }

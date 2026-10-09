@@ -10,15 +10,6 @@ $config = [
     'language' => 'es',
     'timeZone' => 'America/Mexico_City',
     'bootstrap' => ['log'],
-    'container' => [
-        'singletons' => [
-            \yii\mail\MailerInterface::class => [
-                'class' => \yii\symfonymailer\Mailer::class,
-                'useFileTransport' => true,
-                'viewPath' => '@app/mail',
-            ],
-        ],
-    ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',
@@ -43,12 +34,11 @@ $config = [
         ],
         'user' => [
             'identityClass' => \app\models\User::class,
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => \yii\mail\MailerInterface::class,
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

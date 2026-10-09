@@ -87,6 +87,8 @@ class Contrato extends SoftDeleteRecord
             [['encargado', 'nomenclatura'], 'string', 'max' => 50],
             [['encargado'], 'match', 'pattern' => '/\A(?=.*\p{L})[\p{L}\p{M} ]+\z/u',
                 'message' => 'El nombre de la encargada solo puede contener letras y espacios.',
+                // Un nombre antiguo fuera del formato actual no debe impedir editar a un firmante.
+                'when' => static fn(self $model): bool => $model->isNewRecord || $model->isAttributeChanged('encargado'),
                 'enableClientValidation' => false,
             ],
             [['codigo'], 'unique', 'filter' => static fn($query) => $query->withDeleted()],

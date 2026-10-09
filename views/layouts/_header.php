@@ -23,15 +23,10 @@ if (AccessPolicy::allows('user/index')) {
     $items[] = ['label' => 'Usuarios', 'url' => ['/user/index']];
 }
 
-$brandLabel = '<svg class="brand-seal" width="24" height="24" viewBox="0 0 24 24" fill="none"'
-    . ' xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
-    . '<circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.4"/>'
-    . '<circle cx="12" cy="12" r="7.6" stroke="currentColor" stroke-width="1" stroke-dasharray="1.4 2"/>'
-    . '<path d="M9 12.6l2 2 4.3-4.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>'
-    . '</svg><span class="brand-text">'
-    . '<span class="brand-org">SEDUZAC</span>'
-    . '<span class="brand-app">' . Html::encode(Yii::$app->params['appShortName']) . '</span>'
-    . '</span>';
+$brandLabel = Html::img(Yii::getAlias('@web/images/logo-2021-2027.png'), [
+    'class' => 'gov-brand-logo',
+    'alt' => 'Secretaría de Educación del Estado de Zacatecas — ' . Yii::$app->params['appShortName'],
+]);
 ?>
 <header id="header">
     <?php NavBar::begin(

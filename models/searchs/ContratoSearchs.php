@@ -48,6 +48,11 @@ class ContratoSearchs extends Contrato
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => ['defaultOrder' => ['created_at' => SORT_DESC, 'id' => SORT_DESC]],
+            'pagination' => [
+                'pageSize' => 10,
+                'pageSizeParam' => false,
+                'pageParam' => 'pagina',
+            ],
         ]);
 
         $this->load($params);

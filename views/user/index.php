@@ -3,17 +3,33 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\grid\ActionColumn;
+use yii\helpers\Url;
+use app\components\ListReturnUrl;
 use app\models\User;
 
 $this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
+$listado = Yii::$app->request->getQueryString();
 ?>
 <div class="user-index">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
         <h1 class="m-0 contrato-titulo">Usuarios</h1>
-        <?= Html::a('+ Nuevo usuario', ['create'], ['class' => 'btn btn-primary px-4']) ?>
+        <div class="d-flex flex-wrap gap-2">
+            <?= Html::a('Limpiar filtros', ['index'], ['class' => 'btn btn-outline-secondary']) ?>
+            <?= Html::a('+ Nuevo usuario', ['create'], ['class' => 'btn btn-success px-4']) ?>
+        </div>
     </div>
+
+    <?= $this->render('//layouts/_active_filters', [
+        'searchModel' => $searchModel,
+        'filters' => [
+            'username' => 'Nombre de usuario',
+            'email' => 'Correo',
+            'role' => 'Rol',
+            'status' => 'Estado',
+        ],
+    ]) ?>
 
     <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
         <?= GridView::widget([
@@ -25,26 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'email',
                 [
                     'attribute' => 'role',
-                    'value' => function ($model) {
-                        return match ($model->role) {
-                            User::ROLE_ADMIN => 'Administrador',
-                            User::ROLE_RECABADOR => 'Recabador',
-                            default => 'Usuario',
-                        };
-                    },
-                    'filter' => [
-                        User::ROLE_ADMIN => 'Administrador',
-                        User::ROLE_RECABADOR => 'Recabador',
-                        User::ROLE_USUARIO => 'Usuario',
-                    ],
+                    'value' => static fn($model) => User::roleLabels()[$model->role] ?? $model->role,
+                    'filter' => User::roleLabels(),
                 ],
                 [
                     'attribute' => 'status',
                     'format' => 'raw',
                     'value' => function ($model) {
-                        return $model->status == 10
+                        return $model->status == User::STATUS_ACTIVE
                             ? '<span class="badge-estado-ok">Activo</span>'
-                            : '<span class="badge-estado-pendiente">Desactivado</span>';
+                            : '<span class="badge-estado-inactivo">Desactivado</span>';
                     },
                     'filter' => [10 => 'Activo', 0 => 'Desactivado'],
                 ],
@@ -69,6 +75,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'class' => ActionColumn::className(),
+                    'urlCreator' => static function ($action, $model) use ($listado) {
+                        $route = [$action, 'id' => $model->id];
+                        if ($listado !== '' && in_array($action, ['view', 'update'], true)) {
+                            $route[ListReturnUrl::PARAM] = $listado;
+                        }
+                        return Url::to($route);
+                    },
                     'template' => '{view} {update} {delete}',
                 ],
             ],

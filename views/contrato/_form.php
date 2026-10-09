@@ -2,6 +2,7 @@
 $this->registerCssFile('@web/css/contrato.css');
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\components\ListReturnUrl;
 
 $firmas = $firmas ?? ($model->firmas ?: [new \app\models\Firma()]);
 ?>
@@ -48,7 +49,7 @@ $firmas = $firmas ?? ($model->firmas ?: [new \app\models\Firma()]);
     <div class="form-card mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="form-card-title mb-0">Firmantes</h2>
-            <button type="button" id="btn-add-firma" class="btn btn-outline-guinda btn-sm">
+            <button type="button" id="btn-add-firma" class="btn btn-outline-success btn-sm">
                 + Agregar firmante
             </button>
         </div>
@@ -78,7 +79,7 @@ $firmas = $firmas ?? ($model->firmas ?: [new \app\models\Firma()]);
     </div>
 
     <div class="form-actions">
-        <?= Html::a('Cancelar', ['index'], ['class' => 'btn btn-link text-secondary']) ?>
+        <?= Html::a('Cancelar', ListReturnUrl::url('contrato/index'), ['class' => 'btn btn-link text-secondary']) ?>
         <?= Html::submitButton('Guardar contrato', ['class' => 'btn btn-primary px-4']) ?>
     </div>
 

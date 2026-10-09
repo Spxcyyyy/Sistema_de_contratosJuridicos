@@ -14,7 +14,7 @@ class User extends SoftDeleteRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
 
     const ROLE_ADMIN = 'admin';
-    const ROLE_USUARIO = 'usuario';
+    const ROLE_JURIDICOS = 'juridicos';
     const ROLE_RECABADOR = 'recabador';
 
     const SCENARIO_CREATE = 'create';
@@ -48,10 +48,10 @@ class User extends SoftDeleteRecord implements IdentityInterface
             [['username', 'email'], 'required'],
             [['username'], 'string', 'max' => 50],
             [['username'], 'unique', 'filter' => static fn($query) => $query->withDeleted()],
-            [['email'], 'email'],
+            [['email'], 'email', 'enableIDN' => true],
             [['email'], 'unique', 'filter' => static fn($query) => $query->withDeleted()],
-            [['role'], 'in', 'range' => [self::ROLE_ADMIN, self::ROLE_USUARIO, self::ROLE_RECABADOR]],
-            [['role'], 'default', 'value' => self::ROLE_USUARIO],
+            [['role'], 'in', 'range' => [self::ROLE_ADMIN, self::ROLE_JURIDICOS, self::ROLE_RECABADOR]],
+            [['role'], 'default', 'value' => self::ROLE_JURIDICOS],
             [['status'], 'default', 'value' => self::STATUS_ACTIVE],
             [['status'], 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
             [['password'], 'required', 'on' => self::SCENARIO_CREATE],
@@ -76,6 +76,15 @@ class User extends SoftDeleteRecord implements IdentityInterface
             'status' => 'Estado',
             'password' => 'Contraseña',
             'created_at' => 'Fecha de creación',
+        ];
+    }
+
+    public static function roleLabels(): array
+    {
+        return [
+            self::ROLE_JURIDICOS => 'Jurídicos',
+            self::ROLE_ADMIN => 'Administrador',
+            self::ROLE_RECABADOR => 'Recabador',
         ];
     }
 
@@ -122,38 +131,6 @@ class User extends SoftDeleteRecord implements IdentityInterface
     public function generateAuthKey()
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
-    }
-
-    public static function findByPasswordResetToken($token)
-    {
-        if (!static::isPasswordResetTokenValid($token)) {
-            return null;
-        }
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
-    }
-
-    public static function isPasswordResetTokenValid($token)
-    {
-        if (empty($token)) {
-            return false;
-        }
-        $expire = Yii::$app->params['user.passwordResetTokenExpire'] ?? 3600;
-        $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
-        return $timestamp + $expire >= time();
-    }
-
-    public function generatePasswordResetToken()
-    {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
-    }
-
-    public function removePasswordResetToken()
-    {
-        $this->password_reset_token = null;
     }
 
     public function isAdmin()

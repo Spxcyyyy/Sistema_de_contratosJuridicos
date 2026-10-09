@@ -1,26 +1,25 @@
 <?php
 
-use app\components\AccessPolicy;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\components\ListReturnUrl;
 
 /** @var yii\web\View $this */
 /** @var app\models\Firma $model */
 
 $this->title = 'Firma de ' . $model->nombre;
-$this->params['breadcrumbs'][] = ['label' => 'Firmas', 'url' => ['index']];
+$volver = ListReturnUrl::url('firma/index', $listado);
+$this->params['breadcrumbs'][] = ['label' => 'Firmas', 'url' => $volver];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
 ?>
 <div class="firma-view">
+
+    <?= Html::a('&larr; Regresar', $volver, ['class' => 'btn-back']) ?>
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Ver contrato', ['/contrato/view', 'id' => $model->contrato_id], ['class' => 'btn btn-outline-secondary']) ?>
-        <?php if (AccessPolicy::allows('contrato/update')): ?>
-            <?= Html::a('Editar firmantes en el contrato', ['/contrato/update', 'id' => $model->contrato_id], ['class' => 'btn btn-primary']) ?>
-        <?php endif; ?>
     </p>
 
     <?= DetailView::widget([
@@ -37,7 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'nombre',
             [
                 'label' => 'Estado',
-                'value' => $model->estado === 'firmado' ? 'Firmado' : 'Pendiente',
+                'format' => 'raw',
+                'value' => $model->estado === 'firmado'
+                    ? '<span class="badge-estado-ok">Firmado</span>'
+                    : '<span class="badge-estado-pendiente">Pendiente</span>',
             ],
             [
                 'label' => 'Fecha de firma',

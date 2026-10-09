@@ -47,28 +47,6 @@ if (!isset($frameworkPath) || !is_dir($frameworkPath)) {
 require_once($frameworkPath . '/requirements/YiiRequirementChecker.php');
 $requirementsChecker = new YiiRequirementChecker();
 
-$gdMemo = $imagickMemo = 'Either GD PHP extension with FreeType support or ImageMagick PHP extension with PNG support is required for image CAPTCHA.';
-$gdOK = $imagickOK = false;
-
-if (extension_loaded('imagick')) {
-    $imagick = new Imagick();
-    $imagickFormats = $imagick->queryFormats('PNG');
-    if (in_array('PNG', $imagickFormats)) {
-        $imagickOK = true;
-    } else {
-        $imagickMemo = 'Imagick extension should be installed with PNG support in order to be used for image CAPTCHA.';
-    }
-}
-
-if (extension_loaded('gd')) {
-    $gdInfo = gd_info();
-    if (!empty($gdInfo['FreeType Support'])) {
-        $gdOK = true;
-    } else {
-        $gdMemo = 'GD extension should be installed with FreeType support in order to be used for image CAPTCHA.';
-    }
-}
-
 /**
  * Adjust requirements according to your application specifics.
  */
@@ -109,21 +87,6 @@ $requirements = array(
         'by' => '<a href="https://www.yiiframework.com/doc-2.0/yii-caching-memcache.html">MemCache</a>',
         'memo' => extension_loaded('memcached') ? 'To use memcached set <a href="https://www.yiiframework.com/doc-2.0/yii-caching-memcache.html#$useMemcached-detail">MemCache::useMemcached</a> to <code>true</code>.' : ''
     ),
-    // CAPTCHA:
-    array(
-        'name' => 'GD PHP extension with FreeType support',
-        'mandatory' => false,
-        'condition' => $gdOK,
-        'by' => '<a href="https://www.yiiframework.com/doc-2.0/yii-captcha-captcha.html">Captcha</a>',
-        'memo' => $gdMemo,
-    ),
-    array(
-        'name' => 'ImageMagick PHP extension with PNG support',
-        'mandatory' => false,
-        'condition' => $imagickOK,
-        'by' => '<a href="https://www.yiiframework.com/doc-2.0/yii-captcha-captcha.html">Captcha</a>',
-        'memo' => $imagickMemo,
-    ),
     // PHP ini :
     'phpExposePhp' => array(
         'name' => 'Expose PHP',
@@ -138,13 +101,6 @@ $requirements = array(
         'condition' => $requirementsChecker->checkPhpIniOff("allow_url_include"),
         'by' => 'Security reasons',
         'memo' => '"allow_url_include" should be disabled at php.ini',
-    ),
-    'phpSmtp' => array(
-        'name' => 'PHP mail SMTP',
-        'mandatory' => false,
-        'condition' => strlen(ini_get('SMTP')) > 0,
-        'by' => 'Email sending',
-        'memo' => 'PHP mail SMTP server required',
     ),
 );
 

@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace app\controllers;
 
 use Yii;
-use app\models\ContactForm;
 use app\models\Contrato;
 use app\models\LoginForm;
-use yii\captcha\CaptchaAction;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\base\Security;
-use yii\mail\MailerInterface;
 use yii\web\Controller;
 use yii\web\ErrorAction;
 use yii\web\Response;
@@ -22,7 +19,6 @@ class SiteController extends Controller
     public function __construct(
         $id,
         $module,
-        private readonly MailerInterface $mailer,
         private readonly Security $security,
         $config = [],
     ) {
@@ -39,7 +35,7 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['login', 'request-password-reset', 'contact', 'about', 'captcha', 'error'],
+                        'actions' => ['login', 'request-password-reset', 'about', 'error'],
                         'allow' => true,
                     ],
                     [
@@ -73,11 +69,6 @@ class SiteController extends Controller
             'error' => [
                 'class' => ErrorAction::class,
             ],
-            'captcha' => [
-                'class' => CaptchaAction::class,
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-                'transparent' => true,
-            ],
         ];
     }
 
@@ -100,7 +91,6 @@ class SiteController extends Controller
             ],
             'vencidos' => Contrato::find()->vencidos()->orderBy(['fecha_vencimiento' => SORT_ASC, 'id' => SORT_ASC])->limit(5)->all(),
             'proximos' => Contrato::find()->proximos()->orderBy(['fecha_vencimiento' => SORT_ASC, 'id' => SORT_ASC])->limit(5)->all(),
-            'actividades' => \app\models\ContratoActividad::find()->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC])->limit(6)->all(),
         ]);
     }
 
@@ -146,42 +136,15 @@ class SiteController extends Controller
     {
         $model = new \app\models\PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->sendEmail();
-            Yii::$app->session->setFlash('success', 'Tu solicitud fue registrada. Un administrador se pondrá en contacto contigo.');
-            return $this->goHome();
+            if ($model->createRequest()) {
+                Yii::$app->session->setFlash('success', 'Tu solicitud fue registrada. Un administrador la revisará y se pondrá en contacto contigo.');
+                return $this->goHome();
+            }
+
+            $model->addError('username', 'No se pudo registrar la solicitud. Inténtalo de nuevo.');
         }
 
         return $this->render('requestPasswordResetToken', ['model' => $model]);
-    }
-
-
-
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact(): Response|string
-    {
-        $model = new ContactForm();
-
-        $contact = $model->load($this->request->post()) && $model->contact(
-            $this->mailer,
-            Yii::$app->params['adminEmail'],
-            Yii::$app->params['senderEmail'],
-            Yii::$app->params['senderName'],
-        );
-
-        if ($contact) {
-            Yii::$app->session->setFlash(
-                'success',
-                'Thank you for contacting us. We will respond to you as soon as possible.',
-            );
-
-            return $this->refresh();
-        }
-
-        return $this->render('contact', ['model' => $model]);
     }
 
     /**

@@ -6,8 +6,8 @@ $this->title = 'Inicio · Seguimiento de contratos';
 $this->registerCssFile('@web/css/seguimiento.css');
 $tarjetas = [
     'total' => ['Todos los contratos', 'Expedientes registrados', 'neutral'],
-    'proceso' => ['En proceso', 'Contratos por concluir', 'guinda'],
-    'firmas' => ['Firmas pendientes', 'En contratos en proceso', 'guinda'],
+    'proceso' => ['En proceso', 'Contratos por concluir', 'info'],
+    'firmas' => ['Firmas pendientes', 'En contratos en proceso', 'warning'],
     'concluidos' => ['Concluidos', 'Documentos firmados', 'success'],
     'vencidos' => ['Vencidos', 'Requieren atención', 'danger'],
     'proximos' => ['Por vencer', 'Hoy y próximos 7 días', 'warning'],
@@ -15,9 +15,9 @@ $tarjetas = [
 ?>
 <div class="seguimiento">
     <div class="seguimiento-heading">
-        <div><span class="seguimiento-eyebrow">CONTROL DE CONTRATOS</span><h1>Tu resumen de hoy</h1><p class="text-muted mb-0"><?= Html::encode(Yii::$app->formatter->asDate(time(), 'long')) ?> · Pendientes, vencimientos y actividad reciente.</p></div>
+        <div><span class="seguimiento-eyebrow">CONTROL DE CONTRATOS</span><h1>Tu resumen de hoy</h1><p class="text-muted mb-0"><?= Html::encode(Yii::$app->formatter->asDate(time(), 'long')) ?> · Pendientes y vencimientos.</p></div>
         <?php if (AccessPolicy::allows('contrato/create')): ?>
-            <?= Html::a('+ Nuevo contrato', ['/contrato/create'], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('+ Nuevo contrato', ['/contrato/create'], ['class' => 'btn btn-success']) ?>
         <?php endif; ?>
     </div>
     <div class="dashboard-stats">
@@ -42,12 +42,5 @@ $tarjetas = [
             </section>
         <?php endforeach; ?>
     </div>
-    <section class="seguimiento-panel mt-4">
-        <div class="seguimiento-panel-heading"><h2>Actividad reciente</h2><?= Html::a('Ver historial →', ['/contrato/actividad']) ?></div>
-        <?php if (!$actividades): ?><p class="seguimiento-empty">Aquí aparecerán los cambios que se realicen a partir de ahora.</p><?php endif; ?>
-        <?php foreach ($actividades as $actividad): ?>
-            <?= $this->render('/contrato/_actividad', ['model' => $actividad, 'compacto' => true]) ?>
-        <?php endforeach; ?>
-    </section>
     <p class="text-muted small mt-3">Los avisos se actualizan al abrir el panel. Los contratos concluidos o cancelados no generan alertas.</p>
 </div>

@@ -6,12 +6,12 @@ En **Contratos**, marca las casillas y pulsa **Reporte de seleccionados**.
 La casilla del encabezado marca únicamente la página visible. Puedes acumular
 hasta 500 contratos entre páginas y filtros en la misma pestaña; **Limpiar
 selección** vacía el conjunto. Antes de descargar se muestran los códigos
-seleccionados y puedes elegir columnas y formato PDF, Excel o CSV.
+seleccionados y puedes elegir columnas y formato PDF o Excel.
 Este reporte usa exactamente la selección, sin aplicar fechas adicionales.
 El botón **Generar reporte** conserva la opción general por rango de fechas.
 
 Las selecciones vacías, inválidas o con contratos eliminados se rechazan sin
-exportar otros contratos. Excel y CSV utilizan PhpSpreadsheet (instalado con
+exportar otros contratos. Excel utiliza PhpSpreadsheet (instalado con
 Composer).
 
 ## Seguimiento
