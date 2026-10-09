@@ -22,6 +22,17 @@ $listado = Yii::$app->request->getQueryString();
 
     <p class="text-muted">Agrega, edita o quita firmantes desde el contrato correspondiente.</p>
 
+    <?= $this->render('//layouts/_active_filters', [
+        'searchModel' => $searchModel,
+        'filters' => [
+            'nomenclaturaContrato' => 'Nomenclatura',
+            'codigoContrato' => 'Código del contrato',
+            'nombre' => 'Nombre',
+            'estado' => 'Estado',
+            'fechaRegistro' => 'Fecha de registro',
+        ],
+    ]) ?>
+
     <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -38,8 +49,6 @@ $listado = Yii::$app->request->getQueryString();
         ],
         'tableOptions' => ['class' => 'table table-hover mb-0 grid-view'],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'nomenclaturaContrato',
                 'value' => static fn(Firma $model) => $model->contrato?->nomenclatura ?? '—',

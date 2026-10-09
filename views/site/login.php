@@ -23,12 +23,13 @@ $labelOptions = ['class' => 'form-label fw-semibold small'];
             <!-- Brand panel -->
             <div class="col-md-5 d-none d-md-flex login-brand-panel text-white">
                 <div class="d-flex flex-column justify-content-between p-4 p-lg-5 w-100">
-                    <div class="d-flex align-items-center gap-2">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.4"/>
-                            <circle cx="12" cy="12" r="7.6" stroke="currentColor" stroke-width="1" stroke-dasharray="1.4 2"/>
-                            <path d="M9 12.6l2 2 4.3-4.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    <div class="d-flex flex-column align-items-start gap-3">
+                        <span class="login-logo-frame">
+                            <?= Html::img(Yii::getAlias('@web/images/logo-2021-2027.png'), [
+                                'class' => 'login-brand-logo',
+                                'alt' => 'Secretaría de Educación del Estado de Zacatecas',
+                            ]) ?>
+                        </span>
                         <span class="fw-semibold"><?= Html::encode(Yii::$app->params['appShortName']) ?></span>
                     </div>
                     <div>

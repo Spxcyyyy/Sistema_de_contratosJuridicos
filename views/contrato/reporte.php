@@ -50,7 +50,7 @@ $porSeleccion = $reporte->alcance === 'seleccion';
         <hr>
         <h2 class="form-card-title">Formato</h2>
         <div class="mb-4"><label for="reporte-formato" class="visually-hidden">Formato del archivo</label>
-            <?= Html::dropDownList('formato', is_string($reporte->formato) ? $reporte->formato : '', ['pdf' => 'PDF', 'xlsx' => 'Excel (.xlsx)', 'csv' => 'CSV'], ['id' => 'reporte-formato', 'class' => 'form-select', 'required' => true]) ?>
+            <?= Html::dropDownList('formato', is_string($reporte->formato) ? $reporte->formato : '', ['pdf' => 'PDF', 'xlsx' => 'Excel (.xlsx)'], ['id' => 'reporte-formato', 'class' => 'form-select', 'required' => true]) ?>
         </div>
         <div class="form-actions">
             <?= Html::a('Cancelar', ['index'], ['class' => 'btn btn-link text-secondary']) ?>

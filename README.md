@@ -9,7 +9,7 @@ Sistema para registrar contratos jurídicos, administrar firmantes y dar seguimi
 - Filtros por los estados existentes y por fecha en el listado de contratos.
 - Avisos de vencimiento y panel de seguimiento según el rol.
 - Notas e historial de actividad asociado a cada contrato.
-- Reportes en PDF, Excel y CSV.
+- Reportes en PDF y Excel.
 - Administración de usuarios y solicitudes de restablecimiento de contraseña.
 - URLs sencillas: contratos identificados por su código, usuarios mediante referencias públicas y detalle de firmas en `/firmas/detalle`.
 - Eliminación lógica: los registros permanecen en la base con `status_registro = 'eliminado'` y se ocultan en las consultas normales.
@@ -19,13 +19,13 @@ Sistema para registrar contratos jurídicos, administrar firmantes y dar seguimi
 - PHP 8.2 o superior según `composer.json`; Docker incluye PHP 8.5 con Apache.
 - Yii 2, Bootstrap 5 y JavaScript.
 - MariaDB 11 en Docker y Composer para dependencias PHP.
-- Dompdf para PDF y PhpSpreadsheet para Excel y CSV.
+- Dompdf para PDF y PhpSpreadsheet para Excel.
 
 Las versiones concretas de las dependencias están fijadas en `composer.lock`.
 
 ## Permisos
 
-| Acción | Administrador | Usuario | Recabador |
+| Acción | Administrador | Jurídicos | Recabador |
 | --- | --- | --- | --- |
 | Ver listado y detalle de contratos | Sí | Sí | Sí |
 | Crear y editar contratos y sus firmantes | Sí | Sí | No |

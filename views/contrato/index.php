@@ -49,6 +49,22 @@ $listado = Yii::$app->request->getQueryString();
         <noscript><span>Activa JavaScript para seleccionar contratos. El reporte por fechas sigue disponible.</span></noscript>
     </div>
     <?php endif; ?>
+    <?= $this->render('//layouts/_active_filters', [
+        'searchModel' => $searchModel,
+        'filters' => [
+            'codigo' => 'Código',
+            'encargado' => 'Encargado',
+            'nomenclatura' => 'Nomenclatura',
+            'fecha_vencimiento' => 'Fecha límite',
+            'fecha_documento' => 'Fecha del documento',
+            'estado' => 'Estado',
+            'grupo' => 'Grupo del panel',
+            'fecha_documento_desde' => 'Documento desde',
+            'fecha_documento_hasta' => 'Documento hasta',
+            'created_at_desde' => 'Creado desde',
+            'created_at_hasta' => 'Creado hasta',
+        ],
+    ]) ?>
     <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
         <?= GridView::widget([
             'id' => 'contratos-grid',

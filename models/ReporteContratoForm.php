@@ -25,7 +25,7 @@ class ReporteContratoForm extends Model
             [['alcance'], 'required'],
             [['alcance'], 'in', 'range' => ['todos', 'seleccion']],
             [['formato'], 'required'],
-            [['formato'], 'in', 'range' => ['pdf', 'xlsx', 'csv']],
+            [['formato'], 'in', 'range' => ['pdf', 'xlsx']],
             [['columnas'], 'required', 'message' => 'Selecciona al menos una columna.'],
             [['columnas'], 'each', 'rule' => ['in', 'range' => array_keys(self::COLUMNAS)]],
             [['ids_json'], 'validateSelection', 'skipOnEmpty' => false],

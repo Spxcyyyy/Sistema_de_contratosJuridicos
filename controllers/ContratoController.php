@@ -15,7 +15,6 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use yii\helpers\Html;
 
 /**
@@ -256,7 +255,6 @@ class ContratoController extends Controller
                 } else {
                     return match ($reporte->formato) {
                         'xlsx' => $this->generarExcel($contratos, $reporte->columnas),
-                        'csv' => $this->generarCsv($contratos, $reporte->columnas),
                         default => $this->generarPdf($contratos, $reporte->columnas),
                     };
                 }
@@ -341,40 +339,6 @@ class ContratoController extends Controller
         Yii::$app->response->format = Response::FORMAT_RAW;
         Yii::$app->response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         Yii::$app->response->headers->set('Content-Disposition', 'attachment; filename="contratos_' . date('Y-m-d') . '.xlsx"');
-
-        ob_start();
-        $writer->save('php://output');
-        return ob_get_clean();
-    }
-
-    private function generarCsv($contratos, $columnas)
-    {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        $col = 1;
-        foreach ($columnas as $key) {
-            $sheet->setCellValueExplicit([$col, 1], $this->columnasDisponibles[$key], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-            $col++;
-        }
-
-        $row = 2;
-        foreach ($contratos as $contrato) {
-            $col = 1;
-            foreach ($columnas as $key) {
-                $valor = (string) $this->formatearValor($contrato, $key);
-                if (preg_match('/^[=+@\x09\x0a\x0d-]/', $valor)) { $valor = "'" . $valor; }
-                $sheet->setCellValueExplicit([$col, $row], $valor, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                $col++;
-            }
-            $row++;
-        }
-
-        $writer = new Csv($spreadsheet);
-
-        Yii::$app->response->format = Response::FORMAT_RAW;
-        Yii::$app->response->headers->set('Content-Type', 'text/csv');
-        Yii::$app->response->headers->set('Content-Disposition', 'attachment; filename="contratos_' . date('Y-m-d') . '.csv"');
 
         ob_start();
         $writer->save('php://output');

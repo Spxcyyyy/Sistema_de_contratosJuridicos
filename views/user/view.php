@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'email',
                 [
                     'attribute' => 'role',
-                    'value' => match ($model->role) { 'admin' => 'Administrador', 'recabador' => 'Recabador', default => 'Usuario' },
+                    'value' => User::roleLabels()[$model->role] ?? $model->role,
                 ],
                 [
                     'attribute' => 'status',

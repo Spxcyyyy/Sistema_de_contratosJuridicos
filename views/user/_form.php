@@ -19,11 +19,7 @@ $isCreate = $model->isNewRecord;
                 <?= $form->field($model, 'email')->textInput(['maxlength' => 50]) ?>
             </div>
             <div class="col-md-6">
-                <?= $form->field($model, 'role')->dropDownList([
-                    User::ROLE_USUARIO => 'Usuario',
-                    User::ROLE_ADMIN => 'Administrador',
-                    User::ROLE_RECABADOR => 'Recabador',
-                ]) ?>
+                <?= $form->field($model, 'role')->dropDownList(User::roleLabels()) ?>
             </div>
             <div class="col-md-6">
                 <?= $form->field($model, 'status')->dropDownList([

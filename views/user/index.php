@@ -21,6 +21,16 @@ $listado = Yii::$app->request->getQueryString();
         </div>
     </div>
 
+    <?= $this->render('//layouts/_active_filters', [
+        'searchModel' => $searchModel,
+        'filters' => [
+            'username' => 'Nombre de usuario',
+            'email' => 'Correo',
+            'role' => 'Rol',
+            'status' => 'Estado',
+        ],
+    ]) ?>
+
     <div class="card border-0 shadow-sm" style="border-radius: 10px; overflow: hidden;">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
@@ -31,18 +41,8 @@ $listado = Yii::$app->request->getQueryString();
                 'email',
                 [
                     'attribute' => 'role',
-                    'value' => function ($model) {
-                        return match ($model->role) {
-                            User::ROLE_ADMIN => 'Administrador',
-                            User::ROLE_RECABADOR => 'Recabador',
-                            default => 'Usuario',
-                        };
-                    },
-                    'filter' => [
-                        User::ROLE_ADMIN => 'Administrador',
-                        User::ROLE_RECABADOR => 'Recabador',
-                        User::ROLE_USUARIO => 'Usuario',
-                    ],
+                    'value' => static fn($model) => User::roleLabels()[$model->role] ?? $model->role,
+                    'filter' => User::roleLabels(),
                 ],
                 [
                     'attribute' => 'status',
